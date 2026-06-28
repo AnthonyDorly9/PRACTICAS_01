@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Solicitar Demostración — Brighter Perú</title>
+<link rel="stylesheet" href="styles.css">
+<style>
+  .demo-hero {
+    background: linear-gradient(135deg, #ea580c, #f97316, #fb923c);
+    color: white; padding: 64px 24px; text-align: center;
+  }
+  .demo-hero h1 { color: white; margin-bottom: 12px; }
+  .demo-hero p  { color: rgba(255,255,255,.8); max-width: 520px; margin: 0 auto; font-size: 16px; }
+  .demo-hero-badge { display: inline-block; background: rgba(255,255,255,.2); border: 1px solid rgba(255,255,255,.3); border-radius: 20px; padding: 6px 16px; font-size: 13px; font-weight: 600; margin-bottom: 20px; }
+
+  .steps-row {
+    display: grid; grid-template-columns: repeat(3,1fr); gap: 16px;
+    margin-bottom: 40px;
+  }
+  .step-card {
+    background: white; border-radius: 16px; padding: 24px; text-align: center;
+    border: 1px solid var(--border); position: relative; overflow: hidden;
+  }
+  .step-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px;
+    background: var(--orange);
+  }
+  .step-num {
+    width: 40px; height: 40px; border-radius: 50%;
+    background: var(--orange); color: white;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; font-weight: 800; margin: 0 auto 14px;
+  }
+  .step-title { font-size: 15px; font-weight: 700; margin-bottom: 8px; }
+  .step-desc  { font-size: 13px; color: var(--gray); line-height: 1.6; }
+
+  .slot-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; }
+  .slot {
+    padding: 11px; border-radius: 10px; border: 1.5px solid var(--border);
+    text-align: center; cursor: pointer; transition: all .2s;
+    font-size: 13px; font-weight: 600; color: var(--dark);
+  }
+  .slot:hover { border-color: var(--orange); color: var(--orange); }
+  .slot.sel   { background: var(--orange); color: white; border-color: var(--orange); }
+  .slot-date  { font-size: 11px; font-weight: 400; display: block; color: inherit; opacity: .8; margin-top: 3px; }
+
+  .confirm-card {
+    background: white; border-radius: 20px; padding: 48px;
+    text-align: center; border: 1px solid var(--border);
+    max-width: 560px; margin: 80px auto; display: none;
+  }
+  .confirm-icon { font-size: 72px; margin-bottom: 20px; }
+  .confirm-box {
+    background: var(--orange-light); border: 1px solid #fed7aa;
+    border-radius: 12px; padding: 20px; margin-bottom: 24px; text-align: left;
+  }
+  .confirm-row { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 8px; }
+  .confirm-row:last-child { margin-bottom: 0; }
+  .c-key { color: var(--gray); }
+  .c-val { font-weight: 700; }
+
+  .whatsapp-btn {
+    background: #25d366; color: white; border: none; border-radius: 12px;
+    padding: 14px 24px; font-size: 15px; font-weight: 700; cursor: pointer;
+    display: flex; align-items: center; gap: 10px; text-decoration: none;
+    transition: background .2s;
+  }
+  .whatsapp-btn:hover { background: #128c7e; color: white; }
+
+  @media (max-width:700px) {
+    .steps-row { grid-template-columns: 1fr; }
+    .slot-grid  { grid-template-columns: repeat(2,1fr); }
+  }
+</style>
+</head>
+<body>
+
+<div id="header-root"></div>
+
+<!-- ── SUCCESS VIEW ── -->
+<div class="confirm-card" id="confirm-card">
+  <div class="confirm-icon">🎯</div>
+  <h2 style="margin-bottom:10px;">¡Demostración agendada!</h2>
+  <p style="margin-bottom:24px;">Recibimos tu solicitud. Un asesor Brighter te confirmará la visita en menos de 24 horas.</p>
+  <div class="confirm-box" id="confirm-details"></div>
+  <p style="font-size:13px;color:var(--gray);margin-bottom:20px;">
+    📲 Te contactaremos al WhatsApp que registraste. También puedes escribirnos directamente.
+  </p>
+  <a href="https://wa.me/51949688879" class="whatsapp-btn" style="justify-content:center;margin-bottom:12px;">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+    Escribir al WhatsApp
+  </a>
+  <a href="index.html" class="btn btn-ghost btn-full">Volver al inicio</a>
+</div>
+
+<!-- ── FORM VIEW ── -->
+<div id="form-view">
+  <div class="demo-hero">
+    <span class="demo-hero-badge">🎯 Sin costo · Sin compromiso</span>
+    <h1>Solicita tu demostración gratuita</h1>
+    <p>Un asesor Brighter va a tu institución, instala el equipo y hace una demo en vivo. Tú decides después.</p>
+  </div>
+
+  <section class="section">
+    <div class="container">
+
+      <!-- STEPS -->
+      <div class="steps-row">
+        <div class="step-card">
+          <div class="step-num">1</div>
+          <div class="step-title">Llena el formulario</div>
+          <div class="step-desc">Cuéntanos sobre tu institución y el horario que prefieres. Te confirmamos en menos de 24h.</div>
+        </div>
+        <div class="step-card">
+          <div class="step-num">2</div>
+          <div class="step-title">Demo en tu espacio</div>
+          <div class="step-desc">Nuestro asesor lleva el equipo y hace una clase o reunión real en tu local, sin improvisar.</div>
+        </div>
+        <div class="step-card">
+          <div class="step-num">3</div>
+          <div class="step-title">Tú decides</div>
+          <div class="step-desc">Si te convence, coordinamos el pedido con instalación incluida. Si no, sin problema.</div>
+        </div>
+      </div>
+
+      <!-- FORM + SIDEBAR -->
+      <div class="grid-2" style="gap:32px;align-items:start;">
+
+        <!-- FORM -->
+        <div class="card card-padded">
+          <h3 style="margin-bottom:20px;">📋 Datos para tu demostración</h3>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Nombre completo *</label>
+              <input class="form-control" type="text" placeholder="Tu nombre completo" id="f-nombre">
+            </div>
+            <div class="form-group">
+              <label>Cargo en la institución</label>
+              <input class="form-control" type="text" placeholder="Director, Docente, Gerente…" id="f-cargo">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Correo electrónico *</label>
+              <input class="form-control" type="email" placeholder="correo@institución.edu.pe" id="f-email">
+            </div>
+            <div class="form-group">
+              <label>WhatsApp *</label>
+              <input class="form-control" type="tel" placeholder="+51 9XX XXX XXX" id="f-tel">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Nombre de tu institución / empresa *</label>
+            <input class="form-control" type="text" placeholder="Colegio, universidad, empresa o municipalidad" id="f-inst">
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Ciudad</label>
+              <select class="form-control" id="f-ciudad">
+                <option>Arequipa</option>
+                <option>Lima</option>
+                <option>Cusco</option>
+                <option>Trujillo</option>
+                <option>Puno</option>
+                <option>Otra ciudad</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Tipo de institución</label>
+              <select class="form-control" id="f-tipo">
+                <option>Colegio privado</option>
+                <option>Colegio público</option>
+                <option>Universidad</option>
+                <option>Instituto técnico</option>
+                <option>Empresa</option>
+                <option>Municipalidad</option>
+                <option>Otro</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Producto de interés</label>
+            <select class="form-control" id="f-producto">
+              <option>Pantalla Interactiva BTOUCH 86"</option>
+              <option>Pantalla Interactiva BTOUCH 98"</option>
+              <option>Pizarra Electrónica BTOUCH 105"</option>
+              <option>Pizarra Interactiva BTOUCH 110"</option>
+              <option>Tótem Interactivo BT-55XTD</option>
+              <option>ERP Odoo</option>
+              <option>LMS Educativo</option>
+              <option>EnglishIB</option>
+              <option>Quiero asesoría completa</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Elige tu horario preferido *</label>
+            <div class="slot-grid" id="slots">
+              <div class="slot" onclick="selectSlot(this)">9:00 am <span class="slot-date">Lun 7 Jul</span></div>
+              <div class="slot" onclick="selectSlot(this)">3:00 pm <span class="slot-date">Lun 7 Jul</span></div>
+              <div class="slot" onclick="selectSlot(this)">10:00 am <span class="slot-date">Mar 8 Jul</span></div>
+              <div class="slot" onclick="selectSlot(this)">4:00 pm <span class="slot-date">Mar 8 Jul</span></div>
+              <div class="slot" onclick="selectSlot(this)">9:00 am <span class="slot-date">Mié 9 Jul</span></div>
+              <div class="slot" onclick="selectSlot(this)">2:00 pm <span class="slot-date">Mié 9 Jul</span></div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Número de aulas / salas a equipar</label>
+            <select class="form-control" id="f-cantidad">
+              <option>1 aula / sala</option>
+              <option>2 - 5 aulas</option>
+              <option>6 - 15 aulas</option>
+              <option>Más de 15 aulas</option>
+              <option>Aún no lo sé</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Comentario adicional</label>
+            <textarea class="form-control" placeholder="Cuéntanos más sobre tu institución o lo que necesitas…" id="f-comentario"></textarea>
+          </div>
+
+          <button class="btn btn-orange btn-full btn-lg" onclick="submitDemo()" style="margin-top:8px;">
+            📅 Confirmar solicitud de demostración
+          </button>
+
+          <p style="font-size:12px;color:var(--gray);text-align:center;margin-top:12px;">
+            Al enviar aceptas que Brighter Perú te contacte para coordinar la visita.
+          </p>
+        </div>
+
+        <!-- SIDEBAR -->
+        <div>
+          <div class="card card-padded" style="margin-bottom:20px;background:var(--orange-light);border-color:#fed7aa;">
+            <h4 style="margin-bottom:12px;color:var(--orange);">🎯 ¿Qué incluye la demo?</h4>
+            <ul style="list-style:none;">
+              <li style="display:flex;gap:10px;font-size:13px;color:#92400e;margin-bottom:10px;"><span>✓</span>Instalación temporal del equipo en tu espacio</li>
+              <li style="display:flex;gap:10px;font-size:13px;color:#92400e;margin-bottom:10px;"><span>✓</span>Clase o reunión real usando la pantalla</li>
+              <li style="display:flex;gap:10px;font-size:13px;color:#92400e;margin-bottom:10px;"><span>✓</span>Demostración del software (LMS, Google Meet, Uboardmate)</li>
+              <li style="display:flex;gap:10px;font-size:13px;color:#92400e;margin-bottom:10px;"><span>✓</span>Resolución de dudas con el asesor en sitio</li>
+              <li style="display:flex;gap:10px;font-size:13px;color:#92400e;"><span>✓</span>Propuesta personalizada al finalizar</li>
+            </ul>
+          </div>
+
+          <div class="card card-padded" style="margin-bottom:20px;">
+            <h4 style="margin-bottom:16px;">🏆 ¿Por qué elegir demostración?</h4>
+            <div style="display:flex;flex-direction:column;gap:14px;">
+              <div style="display:flex;gap:12px;">
+                <span style="font-size:22px;">🎯</span>
+                <div>
+                  <div style="font-size:13px;font-weight:700;margin-bottom:3px;">Ves la tecnología en acción</div>
+                  <div style="font-size:12px;color:var(--gray);">Nada como tocar y experimentar la pantalla en tu propio espacio.</div>
+                </div>
+              </div>
+              <div style="display:flex;gap:12px;">
+                <span style="font-size:22px;">🤝</span>
+                <div>
+                  <div style="font-size:13px;font-weight:700;margin-bottom:3px;">Asesoría personalizada</div>
+                  <div style="font-size:12px;color:var(--gray);">El asesor entiende tu contexto y te recomienda la solución exacta.</div>
+                </div>
+              </div>
+              <div style="display:flex;gap:12px;">
+                <span style="font-size:22px;">💰</span>
+                <div>
+                  <div style="font-size:13px;font-weight:700;margin-bottom:3px;">Sin riesgo, sin costo</div>
+                  <div style="font-size:12px;color:var(--gray);">La demo es completamente gratuita. Decides después con información real.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card card-padded" style="background:var(--dark);color:white;">
+            <h4 style="color:white;margin-bottom:14px;">📞 Contacto directo</h4>
+            <div style="display:flex;flex-direction:column;gap:12px;font-size:13px;">
+              <a href="https://wa.me/51949688879" class="whatsapp-btn btn-sm" style="justify-content:flex-start;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                +51 949 688 879
+              </a>
+              <div style="color:rgba(255,255,255,.6);">📧 ventas@ibrighter.com</div>
+              <div style="color:rgba(255,255,255,.6);">📞 (054) 254 833</div>
+              <div style="color:rgba(255,255,255,.6);">📍 Arequipa, Perú</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div id="footer-root"></div>
+
+<script src="app.js"></script>
+<script>
+document.getElementById('header-root').innerHTML = renderHeader('demo.html');
+document.getElementById('footer-root').innerHTML = renderFooter();
+
+let selectedSlot = null;
+
+function selectSlot(el) {
+  document.querySelectorAll('.slot').forEach(s => s.classList.remove('sel'));
+  el.classList.add('sel');
+  selectedSlot = el.childNodes[0].textContent.trim() + ' · ' + el.querySelector('.slot-date').textContent;
+}
+
+function submitDemo() {
+  const nombre = document.getElementById('f-nombre').value.trim();
+  const tel    = document.getElementById('f-tel').value.trim();
+  const inst   = document.getElementById('f-inst').value.trim();
+  if (!nombre || !tel || !inst) {
+    showToast('⚠️ Completa los campos obligatorios', 'error'); return;
+  }
+  const prod   = document.getElementById('f-producto').value;
+  const ciudad = document.getElementById('f-ciudad').value;
+  const tipo   = document.getElementById('f-tipo').value;
+
+  document.getElementById('confirm-details').innerHTML = `
+    <div class="confirm-row"><span class="c-key">Institución</span><span class="c-val">${inst}</span></div>
+    <div class="confirm-row"><span class="c-key">Tipo</span><span class="c-val">${tipo} · ${ciudad}</span></div>
+    <div class="confirm-row"><span class="c-key">Producto</span><span class="c-val">${prod}</span></div>
+    <div class="confirm-row"><span class="c-key">Horario preferido</span><span class="c-val">${selectedSlot || 'Por confirmar'}</span></div>
+    <div class="confirm-row"><span class="c-key">Asesor asignado</span><span class="c-val">Equipo Brighter Arequipa</span></div>
+  `;
+
+  document.getElementById('form-view').style.display    = 'none';
+  document.getElementById('confirm-card').style.display = 'block';
+  window.scrollTo(0,0);
+}
+</script>
+</body>
+</html>

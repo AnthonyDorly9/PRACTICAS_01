@@ -1,0 +1,1179 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aprende a Programar — Para novatos 🚀</title>
+<style>
+:root {
+  --bg:      #0f1117;
+  --bg2:     #1a1d27;
+  --bg3:     #22263a;
+  --border:  #2e3250;
+  --teal:    #00d4aa;
+  --purple:  #8b5cf6;
+  --orange:  #f97316;
+  --pink:    #ec4899;
+  --blue:    #3b82f6;
+  --yellow:  #fbbf24;
+  --green:   #22c55e;
+  --red:     #ef4444;
+  --text:    #e2e8f0;
+  --muted:   #64748b;
+  --card-r:  16px;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;line-height:1.6;overflow-x:hidden;}
+
+/* ── PROGRESS BAR ── */
+#progress-bar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--teal),var(--purple));z-index:999;transition:width .4s;}
+
+/* ── NAV ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(15,17,23,.9);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0 24px;height:58px;display:flex;align-items:center;justify-content:space-between;}
+.nav-logo{font-size:16px;font-weight:800;color:var(--teal);letter-spacing:-0.5px;}
+.nav-links{display:flex;gap:4px;}
+.nav-link{padding:6px 12px;border-radius:8px;font-size:12px;font-weight:600;color:var(--muted);cursor:pointer;border:none;background:none;transition:all .2s;}
+.nav-link:hover,.nav-link.active{background:rgba(0,212,170,.1);color:var(--teal);}
+.progress-pill{background:var(--bg3);border:1px solid var(--border);border-radius:20px;padding:6px 14px;font-size:12px;font-weight:700;color:var(--teal);}
+
+/* ── HERO ── */
+.hero{min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:80px 24px 60px;background:radial-gradient(ellipse at 50% 0%,rgba(139,92,246,.12) 0%,transparent 60%);}
+.hero-badge{display:inline-block;background:rgba(0,212,170,.1);border:1px solid rgba(0,212,170,.25);border-radius:20px;padding:6px 16px;font-size:13px;font-weight:600;color:var(--teal);margin-bottom:24px;}
+.hero h1{font-size:clamp(32px,6vw,64px);font-weight:900;letter-spacing:-2px;line-height:1.1;margin-bottom:20px;}
+.hero h1 span{background:linear-gradient(135deg,var(--teal),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.hero p{color:var(--muted);font-size:16px;max-width:500px;margin:0 auto 36px;line-height:1.7;}
+.hero-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
+.hero-stats{display:flex;gap:40px;justify-content:center;margin-top:60px;flex-wrap:wrap;}
+.h-stat{text-align:center;}
+.h-stat-n{font-size:28px;font-weight:900;color:var(--teal);}
+.h-stat-l{font-size:12px;color:var(--muted);}
+
+/* ── BUTTONS ── */
+.btn{display:inline-flex;align-items:center;gap:8px;border:none;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer;padding:12px 22px;transition:all .2s;text-decoration:none;}
+.btn:hover{transform:translateY(-1px);}
+.btn-teal{background:var(--teal);color:#0f1117;}
+.btn-teal:hover{background:#00b896;}
+.btn-purple{background:var(--purple);color:white;}
+.btn-outline{background:transparent;border:1.5px solid var(--border);color:var(--text);}
+.btn-outline:hover{border-color:var(--teal);color:var(--teal);}
+.btn-sm{padding:8px 16px;font-size:13px;border-radius:8px;}
+
+/* ── SECTION ── */
+.section{padding:80px 24px;max-width:1100px;margin:0 auto;}
+.section-label{font-size:11px;font-weight:700;color:var(--teal);text-transform:uppercase;letter-spacing:2px;margin-bottom:10px;}
+.section h2{font-size:clamp(22px,3vw,36px);font-weight:800;letter-spacing:-1px;margin-bottom:12px;}
+.section-sub{color:var(--muted);font-size:15px;max-width:560px;margin-bottom:48px;}
+.divider{height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent);margin:40px 0;}
+
+/* ── CARDS ── */
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--card-r);padding:24px;transition:border-color .2s;}
+.card:hover{border-color:var(--teal);}
+.card-dark{background:var(--bg3);}
+
+/* ── CODE BLOCK ── */
+.code{background:#0d1117;border:1px solid var(--border);border-radius:10px;padding:16px 20px;font-family:'Consolas','Courier New',monospace;font-size:13px;line-height:1.8;overflow-x:auto;position:relative;white-space:pre;}
+.code .kw{color:#ff79c6;}
+.code .cl{color:#8be9fd;}
+.code .fn{color:#50fa7b;}
+.code .st{color:#f1fa8c;}
+.code .cm{color:#6272a4;font-style:italic;}
+.code .num{color:#bd93f9;}
+.code .pr{color:#ffb86c;}
+
+/* ── BADGE ── */
+.badge{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;}
+.badge-teal{background:rgba(0,212,170,.1);color:var(--teal);border:1px solid rgba(0,212,170,.2);}
+.badge-purple{background:rgba(139,92,246,.1);color:var(--purple);border:1px solid rgba(139,92,246,.2);}
+.badge-orange{background:rgba(249,115,22,.1);color:var(--orange);border:1px solid rgba(249,115,22,.2);}
+.badge-blue{background:rgba(59,130,246,.1);color:var(--blue);border:1px solid rgba(59,130,246,.2);}
+.badge-green{background:rgba(34,197,94,.1);color:var(--green);border:1px solid rgba(34,197,94,.2);}
+.badge-pink{background:rgba(236,72,153,.1);color:var(--pink);border:1px solid rgba(236,72,153,.2);}
+
+/* ══════════════════════════════════
+   OOP SECTION
+══════════════════════════════════ */
+
+/* Class → Object animator */
+.class-factory{background:var(--bg2);border:1px solid var(--border);border-radius:20px;padding:32px;text-align:center;}
+.blueprint{border:2px dashed var(--purple);border-radius:16px;padding:20px 28px;display:inline-block;margin-bottom:24px;position:relative;}
+.blueprint-label{position:absolute;top:-11px;left:16px;background:var(--bg2);padding:0 8px;font-size:11px;font-weight:700;color:var(--purple);text-transform:uppercase;letter-spacing:1px;}
+.blueprint h3{color:var(--purple);font-size:18px;margin-bottom:8px;}
+.blueprint .attrs{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:10px;}
+.attr-pill{background:rgba(139,92,246,.15);border:1px solid rgba(139,92,246,.3);color:var(--purple);border-radius:20px;padding:4px 12px;font-size:12px;font-weight:600;}
+.factory-arrow{font-size:32px;color:var(--muted);margin:8px 0;}
+.objects-row{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;min-height:80px;align-items:center;}
+.auto-obj{background:var(--bg3);border:2px solid var(--teal);border-radius:14px;padding:14px 18px;font-size:13px;text-align:left;animation:popIn .3s cubic-bezier(.34,1.56,.64,1);min-width:140px;}
+.auto-obj .obj-title{font-size:11px;font-weight:700;color:var(--teal);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;}
+.auto-obj .obj-attr{color:var(--muted);font-size:12px;margin-bottom:3px;}
+.auto-obj .obj-attr span{color:var(--text);font-weight:600;}
+@keyframes popIn{from{transform:scale(.5) translateY(20px);opacity:0;}to{transform:scale(1) translateY(0);opacity:1;}}
+
+.oop-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px;margin-top:28px;}
+.oop-card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:20px;transition:all .25s;}
+.oop-card:hover{border-color:var(--teal);transform:translateY(-2px);}
+.oop-icon{font-size:28px;margin-bottom:12px;}
+.oop-term{font-size:15px;font-weight:800;margin-bottom:6px;}
+.oop-analogy{font-size:13px;color:var(--muted);line-height:1.6;}
+.oop-analogy strong{color:var(--text);}
+
+/* Constructor animation */
+.assembly-line{display:flex;align-items:center;gap:0;background:var(--bg3);border-radius:16px;padding:20px;overflow:hidden;position:relative;}
+.conveyor{flex:1;height:4px;background:repeating-linear-gradient(90deg,var(--teal) 0px,var(--teal) 20px,transparent 20px,transparent 30px);animation:move 1s linear infinite;}
+@keyframes move{from{background-position:0 0;}to{background-position:30px 0;}}
+.station{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:12px 16px;text-align:center;font-size:12px;font-weight:700;white-space:nowrap;z-index:1;}
+.station .s-icon{font-size:20px;display:block;margin-bottom:4px;}
+
+/* ══════════════════════════════════
+   4 PILLARS
+══════════════════════════════════ */
+.pillars-tabs{display:flex;gap:4px;margin-bottom:24px;flex-wrap:wrap;}
+.pillar-tab{padding:10px 20px;border-radius:10px;border:1.5px solid var(--border);background:var(--bg2);color:var(--muted);font-size:13px;font-weight:700;cursor:pointer;transition:all .2s;}
+.pillar-tab:hover{border-color:var(--teal);color:var(--teal);}
+.pillar-tab.active{background:var(--teal);border-color:var(--teal);color:#0f1117;}
+.pillar-content{display:none;}
+.pillar-content.active{display:grid;grid-template-columns:1fr 1fr;gap:24px;animation:fadeUp .3s ease;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+
+/* Encapsulamiento: ATM */
+.atm-demo{background:var(--bg3);border-radius:16px;padding:24px;text-align:center;}
+.atm-box{border:2px solid var(--border);border-radius:12px;padding:16px;margin:12px 0;position:relative;}
+.atm-box .locked{position:absolute;top:-12px;right:12px;background:var(--orange);color:white;border-radius:20px;font-size:11px;font-weight:700;padding:3px 8px;}
+.atm-slot{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:10px;margin:6px 0;font-size:12px;color:var(--muted);cursor:pointer;transition:all .2s;}
+.atm-slot:hover{border-color:var(--teal);color:var(--teal);}
+.atm-result{background:var(--bg2);border:1px solid var(--green);border-radius:8px;padding:10px;margin-top:10px;font-size:12px;color:var(--green);min-height:36px;}
+
+/* Herencia: árbol */
+.tree-container{padding:20px 0;}
+.tree-node{display:flex;flex-direction:column;align-items:center;}
+.tree-box{background:var(--bg3);border:2px solid var(--purple);border-radius:10px;padding:10px 16px;text-align:center;font-size:13px;font-weight:700;white-space:nowrap;}
+.tree-box.parent{border-color:var(--orange);background:rgba(249,115,22,.1);}
+.tree-box.child{border-color:var(--blue);}
+.tree-line{width:2px;height:24px;background:var(--border);}
+.tree-row{display:flex;gap:16px;align-items:flex-start;justify-content:center;}
+.tree-branch{display:flex;flex-direction:column;align-items:center;}
+.tree-h-line{height:2px;background:var(--border);width:60px;margin-top:24px;}
+.tree-attrs{margin-top:8px;font-size:11px;color:var(--muted);text-align:center;}
+
+/* Polimorfismo: animales */
+.animals-row{display:flex;gap:12px;flex-wrap:wrap;}
+.animal-card{background:var(--bg3);border:2px solid var(--border);border-radius:12px;padding:14px;text-align:center;cursor:pointer;transition:all .2s;flex:1;min-width:100px;}
+.animal-card:hover{border-color:var(--teal);}
+.animal-card.playing{border-color:var(--yellow);animation:shake .3s ease;}
+@keyframes shake{0%,100%{transform:translateX(0);}25%{transform:translateX(-4px);}75%{transform:translateX(4px);}}
+.animal-emoji{font-size:36px;display:block;margin-bottom:8px;}
+.animal-name{font-size:13px;font-weight:700;}
+.animal-sound{font-size:12px;color:var(--muted);margin-top:4px;min-height:20px;}
+.sound-bubble{background:var(--yellow);color:#0f1117;border-radius:20px;padding:4px 10px;font-weight:700;display:inline-block;animation:popIn .3s ease;}
+
+/* Abstracción: auto driving */
+.car-demo{background:var(--bg3);border-radius:16px;padding:20px;}
+.steering-controls{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;max-width:200px;margin:16px auto;}
+.car-btn{background:var(--bg2);border:1.5px solid var(--border);border-radius:8px;padding:10px;text-align:center;cursor:pointer;font-size:13px;font-weight:700;transition:all .2s;}
+.car-btn:hover{border-color:var(--teal);color:var(--teal);}
+.hidden-engine{background:var(--bg2);border:1px dashed var(--border);border-radius:10px;padding:12px;margin-top:12px;font-size:12px;color:var(--muted);text-align:center;}
+.car-road{background:#1a1d27;border-radius:10px;height:60px;margin:12px 0;display:flex;align-items:center;padding:0 16px;position:relative;overflow:hidden;}
+.car-icon{font-size:28px;position:absolute;transition:left .4s ease;}
+.car-status{font-size:13px;color:var(--muted);text-align:center;margin-top:8px;min-height:24px;}
+
+/* ══════════════════════════════════
+   DATABASES
+══════════════════════════════════ */
+.db-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;margin-bottom:40px;}
+.db-card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:20px;}
+.db-card .term{font-size:15px;font-weight:800;margin-bottom:6px;color:var(--text);}
+.db-card .analogy{font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:10px;}
+
+/* Table visual */
+.sql-table{width:100%;border-collapse:collapse;font-size:13px;}
+.sql-table th{background:var(--bg3);color:var(--teal);padding:10px 14px;text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.5px;border-bottom:2px solid var(--border);}
+.sql-table td{padding:9px 14px;border-bottom:1px solid var(--border);transition:background .2s;}
+.sql-table tr:hover td{background:rgba(0,212,170,.04);}
+.pk{color:var(--yellow);font-weight:700;}
+.fk{color:var(--blue);font-weight:700;}
+.new-row{animation:highlightRow .5s ease;}
+@keyframes highlightRow{0%{background:rgba(0,212,170,.2);}100%{background:transparent;}}
+
+/* CRUD buttons */
+.crud-bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;}
+.crud-btn{padding:8px 16px;border-radius:8px;border:none;font-size:13px;font-weight:700;cursor:pointer;transition:all .2s;}
+.crud-c{background:rgba(34,197,94,.15);color:var(--green);border:1px solid rgba(34,197,94,.3);}
+.crud-r{background:rgba(59,130,246,.15);color:var(--blue);border:1px solid rgba(59,130,246,.3);}
+.crud-u{background:rgba(251,191,36,.15);color:var(--yellow);border:1px solid rgba(251,191,36,.3);}
+.crud-d{background:rgba(239,68,68,.15);color:var(--red);border:1px solid rgba(239,68,68,.3);}
+.crud-btn:hover{transform:scale(1.05);}
+
+/* JOIN animation */
+.join-demo{background:var(--bg3);border-radius:16px;padding:24px;}
+.tables-row{display:grid;grid-template-columns:1fr auto 1fr;gap:16px;align-items:center;}
+.join-arrow{text-align:center;font-size:24px;color:var(--teal);}
+.mini-table{font-size:12px;}
+.mini-table .h{background:var(--bg2);padding:6px 10px;font-weight:700;color:var(--teal);border-radius:6px 6px 0 0;font-size:11px;text-transform:uppercase;}
+.mini-table .r{padding:6px 10px;border-bottom:1px solid var(--border);}
+.mini-table .r.highlighted{background:rgba(0,212,170,.1);color:var(--teal);}
+.result-table{display:none;margin-top:16px;}
+.result-table.show{display:block;animation:fadeUp .4s ease;}
+
+/* SQL vs NoSQL */
+.vs-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.vs-box{border-radius:12px;padding:20px;}
+.vs-sql{background:rgba(59,130,246,.08);border:1px solid rgba(59,130,246,.2);}
+.vs-nosql{background:rgba(249,115,22,.08);border:1px solid rgba(249,115,22,.2);}
+.vs-title{font-size:15px;font-weight:800;margin-bottom:12px;}
+.vs-item{font-size:12px;color:var(--muted);margin-bottom:6px;display:flex;gap:8px;}
+
+/* ══════════════════════════════════
+   ANDROID STUDIO
+══════════════════════════════════ */
+.ide-mockup{background:#1e1e2e;border:1px solid var(--border);border-radius:16px;overflow:hidden;}
+.ide-titlebar{background:#13131f;padding:12px 16px;display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--border);}
+.ide-dot{width:12px;height:12px;border-radius:50%;}
+.ide-tabs{display:flex;gap:0;background:#13131f;border-bottom:1px solid var(--border);}
+.ide-tab{padding:8px 20px;font-size:12px;font-weight:600;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;transition:all .2s;}
+.ide-tab.active{color:var(--teal);border-bottom-color:var(--teal);}
+.ide-body{padding:20px;font-family:'Consolas','Courier New',monospace;font-size:13px;line-height:1.9;min-height:200px;}
+.ide-sidebar{background:#13131f;border-right:1px solid var(--border);padding:12px;font-size:11px;color:var(--muted);}
+.ide-layout{display:grid;grid-template-columns:180px 1fr;}
+.file-tree .f{padding:4px 8px;cursor:pointer;border-radius:4px;display:flex;gap:6px;align-items:center;font-size:12px;}
+.file-tree .f:hover{background:rgba(255,255,255,.05);}
+.file-tree .f.active{background:rgba(0,212,170,.1);color:var(--teal);}
+
+.kotlin-magic{background:rgba(139,92,246,.08);border:1px solid rgba(139,92,246,.2);border-radius:12px;padding:16px;margin-top:16px;}
+.magic-title{font-size:13px;font-weight:700;color:var(--purple);margin-bottom:10px;}
+.magic-item{display:flex;gap:10px;align-items:flex-start;margin-bottom:8px;font-size:12px;color:var(--muted);}
+.magic-item::before{content:'✨';flex-shrink:0;}
+
+.android-components{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px;margin-top:24px;}
+.android-comp{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:16px;text-align:center;cursor:pointer;transition:all .2s;}
+.android-comp:hover{border-color:var(--purple);transform:translateY(-2px);}
+.android-comp .ac-icon{font-size:28px;margin-bottom:8px;}
+.android-comp .ac-name{font-size:13px;font-weight:700;margin-bottom:4px;}
+.android-comp .ac-desc{font-size:11px;color:var(--muted);}
+
+/* ── QUIZ ── */
+.quiz-section{background:var(--bg2);border:1px solid var(--border);border-radius:20px;padding:32px;margin-top:48px;}
+.quiz-q{font-size:16px;font-weight:700;margin-bottom:20px;}
+.quiz-opts{display:flex;flex-direction:column;gap:10px;}
+.quiz-opt{background:var(--bg3);border:1.5px solid var(--border);border-radius:10px;padding:14px 18px;cursor:pointer;font-size:14px;transition:all .2s;}
+.quiz-opt:hover{border-color:var(--teal);}
+.quiz-opt.correct{border-color:var(--green);background:rgba(34,197,94,.1);color:var(--green);}
+.quiz-opt.wrong{border-color:var(--red);background:rgba(239,68,68,.1);color:var(--red);}
+.quiz-feedback{margin-top:14px;padding:14px;border-radius:10px;font-size:14px;display:none;}
+.quiz-feedback.show{display:block;animation:fadeUp .3s ease;}
+.quiz-nav{display:flex;gap:10px;margin-top:16px;align-items:center;justify-content:space-between;}
+.quiz-progress{font-size:13px;color:var(--muted);}
+
+/* ── SCROLL REVEAL ── */
+.reveal{opacity:0;transform:translateY(30px);transition:opacity .6s,transform .6s;}
+.reveal.visible{opacity:1;transform:translateY(0);}
+
+/* ── TOOLTIP ── */
+.tooltip{position:relative;display:inline-block;}
+.tooltip:hover::after{content:attr(data-tip);position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:var(--bg3);border:1px solid var(--border);color:var(--text);font-size:12px;padding:6px 10px;border-radius:8px;white-space:nowrap;z-index:50;pointer-events:none;}
+
+/* responsive */
+@media(max-width:700px){
+  .pillar-content.active,.vs-grid,.tables-row,.ide-layout{grid-template-columns:1fr;}
+  .nav-links{display:none;}
+  .join-arrow{transform:rotate(90deg);}
+}
+</style>
+</head>
+<body>
+<div id="progress-bar" style="width:0%"></div>
+
+<!-- NAV -->
+<nav>
+  <div style="display:flex;align-items:center;gap:12px;">
+    <a href="#" onclick="history.back();return false;" style="display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:8px;background:rgba(255,255,255,.05);border:1px solid var(--border);color:var(--muted);font-size:12px;font-weight:700;text-decoration:none;transition:all .2s;" onmouseover="this.style.borderColor='var(--teal)';this.style.color='var(--teal)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--muted)'">← Volver a Brighter</a>
+    <div class="nav-logo">🚀 Aprende a Programar</div>
+  </div>
+  <div class="nav-links">
+    <button class="nav-link" onclick="scrollTo('oop')">POO</button>
+    <button class="nav-link" onclick="scrollTo('pillars')">4 Pilares</button>
+    <button class="nav-link" onclick="scrollTo('databases')">Bases de Datos</button>
+    <button class="nav-link" onclick="scrollTo('android')">Android Studio</button>
+    <button class="nav-link" onclick="scrollTo('quiz')">Quiz 🎮</button>
+  </div>
+  <div class="progress-pill" id="progress-pill">0 / 5 temas</div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div>
+    <div class="hero-badge">👋 Para mi amigo que empieza con Kotlin</div>
+    <h1>Programar es<br><span>más fácil</span> de lo que crees</h1>
+    <p>Sin tecnicismos aburridos. Solo analogías que tienen sentido, visualizaciones interactivas y código que puedes tocar.</p>
+    <div class="hero-btns">
+      <button class="btn btn-teal" onclick="scrollTo('oop')">🎮 Empezar ahora</button>
+      <button class="btn btn-outline" onclick="scrollTo('quiz')">🧠 Ir al quiz</button>
+    </div>
+    <div class="hero-stats">
+      <div class="h-stat"><div class="h-stat-n">5</div><div class="h-stat-l">temas clave</div></div>
+      <div class="h-stat"><div class="h-stat-n">100%</div><div class="h-stat-l">interactivo</div></div>
+      <div class="h-stat"><div class="h-stat-n">0</div><div class="h-stat-l">aburrimiento</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ POO ═══════════════ -->
+<section class="section reveal" id="oop">
+  <div class="section-label">Tema 1 · Programación Orientada a Objetos</div>
+  <h2>¿Qué es la POO?</h2>
+  <p class="section-sub">Programar en objetos es como diseñar con moldes. Primero defines el molde (la Clase), luego lo usas para crear cosas reales (Objetos).</p>
+
+  <!-- CLASS → OBJECT FACTORY -->
+  <div class="class-factory reveal">
+    <div class="blueprint">
+      <span class="blueprint-label">📐 Clase (el molde)</span>
+      <h3>Auto</h3>
+      <div class="attrs">
+        <span class="attr-pill">marca: String</span>
+        <span class="attr-pill">color: String</span>
+        <span class="attr-pill">velocidad: Int</span>
+        <span class="attr-pill">acelerar()</span>
+        <span class="attr-pill">frenar()</span>
+      </div>
+    </div>
+    <div class="factory-arrow">⬇️</div>
+    <p style="color:var(--muted);font-size:13px;margin-bottom:16px;">Haz clic para crear un objeto (instancia) de la clase Auto:</p>
+    <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:20px;">
+      <button class="btn btn-teal btn-sm" onclick="createAuto('Toyota','🔴 Rojo')">🔴 Crear Auto Rojo</button>
+      <button class="btn btn-purple btn-sm" onclick="createAuto('Honda','🔵 Azul')">🔵 Crear Auto Azul</button>
+      <button class="btn btn-sm" style="background:rgba(251,191,36,.15);border:1px solid var(--yellow);color:var(--yellow);" onclick="createAuto('BMW','🟡 Amarillo')">🟡 Crear Auto Amarillo</button>
+      <button class="btn btn-outline btn-sm" onclick="clearAutos()">🗑 Limpiar</button>
+    </div>
+    <div class="objects-row" id="objects-row">
+      <span style="color:var(--muted);font-size:13px;">👆 Haz clic en un botón para crear tu primer objeto</span>
+    </div>
+  </div>
+
+  <!-- CONCEPTS GRID -->
+  <div class="oop-grid reveal" style="margin-top:32px;">
+    <div class="oop-card">
+      <div class="oop-icon">📐</div>
+      <div class="oop-term" style="color:var(--purple);">Clase</div>
+      <div class="oop-analogy">El <strong>molde o plano</strong>. Define cómo será algo, pero no es la cosa en sí. "La clase Auto define que todo auto tiene marca, color y puede acelerar."</div>
+    </div>
+    <div class="oop-card">
+      <div class="oop-icon">🚗</div>
+      <div class="oop-term" style="color:var(--teal);">Objeto</div>
+      <div class="oop-analogy">La <strong>cosa real creada</strong> a partir del molde. Si la clase es el plano, el objeto es la casa construida. "Mi auto rojo específico es un objeto de la clase Auto."</div>
+    </div>
+    <div class="oop-card">
+      <div class="oop-icon">🏭</div>
+      <div class="oop-term" style="color:var(--orange);">Constructor</div>
+      <div class="oop-analogy">Método especial que <strong>se ejecuta al crear el objeto</strong> para darle sus valores iniciales. "Como la línea de ensamblaje: cuando creo el objeto, el constructor le pone su marca y color."</div>
+    </div>
+    <div class="oop-card">
+      <div class="oop-icon">🏷️</div>
+      <div class="oop-term" style="color:var(--yellow);">Atributos</div>
+      <div class="oop-analogy">Las <strong>características</strong> de un objeto. "En la clase Auto, los atributos serían <em>marca</em>, <em>color</em> y <em>velocidad</em>."</div>
+    </div>
+    <div class="oop-card">
+      <div class="oop-icon">⚡</div>
+      <div class="oop-term" style="color:var(--green);">Métodos</div>
+      <div class="oop-analogy">Las <strong>acciones</strong> que un objeto puede hacer. "acelerar() o frenar() serían métodos de la clase Auto. Son funciones dentro de la clase."</div>
+    </div>
+    <div class="oop-card">
+      <div class="oop-icon">🎯</div>
+      <div class="oop-term" style="color:var(--pink);">Instancia</div>
+      <div class="oop-analogy">Cada objeto creado <strong>a partir de una clase</strong> es una instancia. "val miAuto = Auto("Toyota","Rojo") crea una instancia de Auto."</div>
+    </div>
+  </div>
+
+  <!-- KOTLIN CODE -->
+  <div class="card reveal" style="margin-top:32px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+      <h3>Así se ve en Kotlin 🇰🇷</h3>
+      <span class="badge badge-teal">Kotlin · Android Studio</span>
+    </div>
+    <div class="code">
+<span class="cm">// 1. La CLASE (el molde)</span>
+<span class="kw">class</span> <span class="cl">Auto</span>(<span class="pr">marca</span>: <span class="cl">String</span>, <span class="pr">color</span>: <span class="cl">String</span>) {
+    <span class="cm">// ATRIBUTOS</span>
+    <span class="kw">var</span> <span class="pr">velocidad</span>: <span class="cl">Int</span> = <span class="num">0</span>
+
+    <span class="cm">// MÉTODOS (acciones)</span>
+    <span class="kw">fun</span> <span class="fn">acelerar</span>() { <span class="pr">velocidad</span> += <span class="num">10</span> }
+    <span class="kw">fun</span> <span class="fn">frenar</span>()    { <span class="pr">velocidad</span> -= <span class="num">10</span> }
+}
+
+<span class="cm">// 2. CREAR OBJETOS (instancias del molde)</span>
+<span class="kw">val</span> <span class="pr">miAuto</span>    = <span class="cl">Auto</span>(<span class="st">"Toyota"</span>, <span class="st">"Rojo"</span>)
+<span class="kw">val</span> <span class="pr">tuAuto</span>    = <span class="cl">Auto</span>(<span class="st">"Honda"</span>, <span class="st">"Azul"</span>)
+
+<span class="cm">// 3. USAR métodos del objeto</span>
+<span class="pr">miAuto</span>.<span class="fn">acelerar</span>()  <span class="cm">// velocidad = 10</span>
+<span class="pr">miAuto</span>.<span class="fn">acelerar</span>()  <span class="cm">// velocidad = 20</span></div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══════════════ 4 PILLARS ═══════════════ -->
+<section class="section reveal" id="pillars">
+  <div class="section-label">Tema 2 · Los 4 Pilares de la POO</div>
+  <h2>Los 4 pilares que debes conocer</h2>
+  <p class="section-sub">Estos conceptos te los pueden preguntar directo en una entrevista. Aquí los ves en acción, no solo de memoria.</p>
+
+  <div class="pillars-tabs">
+    <button class="pillar-tab active" onclick="showPillar('encap',this)">🔒 Encapsulamiento</button>
+    <button class="pillar-tab" onclick="showPillar('herencia',this)">🌳 Herencia</button>
+    <button class="pillar-tab" onclick="showPillar('poli',this)">🎭 Polimorfismo</button>
+    <button class="pillar-tab" onclick="showPillar('abstr',this)">🎭 Abstracción</button>
+  </div>
+
+  <!-- ENCAPSULAMIENTO -->
+  <div class="pillar-content active" id="pillar-encap">
+    <div>
+      <span class="badge badge-orange" style="margin-bottom:12px;">🔒 Encapsulamiento</span>
+      <h3 style="margin-bottom:8px;">Esconder los datos internos</h3>
+      <p style="color:var(--muted);font-size:14px;line-height:1.7;margin-bottom:16px;">
+        Se usa <code style="background:var(--bg3);padding:2px 6px;border-radius:4px;color:var(--orange);">private</code> para proteger datos y métodos <code style="background:var(--bg3);padding:2px 6px;border-radius:4px;color:var(--green);">get()</code>/<code style="background:var(--bg3);padding:2px 6px;border-radius:4px;color:var(--green);">set()</code> para acceder controladamente.
+      </p>
+      <div class="code" style="font-size:12px;">
+<span class="kw">class</span> <span class="cl">CuentaBancaria</span> {
+    <span class="kw">private var</span> <span class="pr">saldo</span>: <span class="cl">Double</span> = <span class="num">0.0</span>  <span class="cm">// ← nadie accede directo</span>
+
+    <span class="kw">fun</span> <span class="fn">depositar</span>(<span class="pr">monto</span>: <span class="cl">Double</span>) {
+        <span class="kw">if</span> (<span class="pr">monto</span> > <span class="num">0</span>) <span class="pr">saldo</span> += <span class="pr">monto</span>  <span class="cm">// acceso controlado</span>
+    }
+    <span class="kw">fun</span> <span class="fn">getSaldo</span>() = <span class="pr">saldo</span>  <span class="cm">// solo lectura</span>
+}</div>
+    </div>
+    <div class="atm-demo">
+      <h4 style="margin-bottom:12px;">🏧 Cajero Automático — inténtalo</h4>
+      <div class="atm-box">
+        <span class="locked">🔒 private</span>
+        <div style="font-size:13px;color:var(--muted);margin-bottom:10px;">Datos internos (no accesibles directamente):</div>
+        <div style="font-size:12px;color:var(--border);">saldo = ████████</div>
+        <div style="font-size:12px;color:var(--border);">pin = ████</div>
+      </div>
+      <p style="font-size:12px;color:var(--muted);margin-bottom:10px;">Solo puedes usar los botones controlados:</p>
+      <div class="atm-slot" onclick="atmAction('saldo')">📊 Ver mi saldo</div>
+      <div class="atm-slot" onclick="atmAction('depositar')">💰 Depositar S/ 100</div>
+      <div class="atm-slot" onclick="atmAction('retirar')">💸 Retirar S/ 50</div>
+      <div class="atm-result" id="atm-result">← Toca un botón para interactuar</div>
+    </div>
+  </div>
+
+  <!-- HERENCIA -->
+  <div class="pillar-content" id="pillar-herencia">
+    <div>
+      <span class="badge badge-purple" style="margin-bottom:12px;">🌳 Herencia</span>
+      <h3 style="margin-bottom:8px;">Reutilizar código con una clase padre</h3>
+      <p style="color:var(--muted);font-size:14px;line-height:1.7;margin-bottom:16px;">
+        La clase hija hereda todo de la clase padre. No repites código.
+      </p>
+      <div class="code" style="font-size:12px;">
+<span class="kw">open class</span> <span class="cl">Vehiculo</span> {            <span class="cm">// PADRE</span>
+    <span class="kw">var</span> <span class="pr">ruedas</span>: <span class="cl">Int</span> = <span class="num">4</span>
+    <span class="kw">fun</span> <span class="fn">arrancar</span>() { <span class="cm">/* encender */</span> }
+}
+
+<span class="kw">class</span> <span class="cl">Auto</span> : <span class="cl">Vehiculo</span>() {       <span class="cm">// HIJO</span>
+    <span class="kw">fun</span> <span class="fn">abrirMaletero</span>() { }  <span class="cm">// propio</span>
+}
+
+<span class="kw">class</span> <span class="cl">Moto</span> : <span class="cl">Vehiculo</span>() {       <span class="cm">// HIJO</span>
+    <span class="kw">init</span> { <span class="pr">ruedas</span> = <span class="num">2</span> }
+    <span class="kw">fun</span> <span class="fn">hacerCaballito</span>() { }
+}</div>
+    </div>
+    <div class="card card-dark">
+      <h4 style="margin-bottom:16px;">🌳 Árbol de herencia</h4>
+      <div class="tree-container">
+        <div class="tree-node">
+          <div class="tree-box parent">🚗 Vehiculo<div class="tree-attrs">ruedas · arrancar()</div></div>
+          <div class="tree-line"></div>
+          <div style="display:flex;gap:0;align-items:flex-start;">
+            <div style="display:flex;flex-direction:column;align-items:flex-end;">
+              <div class="tree-h-line" style="width:80px;margin-top:0;"></div>
+            </div>
+            <div class="tree-row">
+              <div class="tree-branch">
+                <div class="tree-box child">🚗 Auto<div class="tree-attrs">✓ ruedas · ✓ arrancar()<br>+ abrirMaletero()</div></div>
+              </div>
+              <div style="width:80px;"></div>
+              <div class="tree-branch">
+                <div class="tree-box child">🏍 Moto<div class="tree-attrs">✓ ruedas=2 · ✓ arrancar()<br>+ hacerCaballito()</div></div>
+              </div>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:flex-start;">
+              <div class="tree-h-line" style="width:80px;margin-top:0;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style="margin-top:16px;background:rgba(139,92,246,.08);border:1px solid rgba(139,92,246,.2);border-radius:10px;padding:12px;font-size:13px;color:var(--muted);">
+        💡 <strong style="color:var(--purple);">open</strong> en Kotlin significa "esta clase puede ser heredada". Por defecto las clases son cerradas.
+      </div>
+    </div>
+  </div>
+
+  <!-- POLIMORFISMO -->
+  <div class="pillar-content" id="pillar-poli">
+    <div>
+      <span class="badge badge-blue" style="margin-bottom:12px;">🎭 Polimorfismo</span>
+      <h3 style="margin-bottom:8px;">El mismo método, comportamientos distintos</h3>
+      <p style="color:var(--muted);font-size:14px;line-height:1.7;margin-bottom:16px;">
+        El método se llama igual en todos, pero cada clase lo implementa a su manera con <code style="background:var(--bg3);padding:2px 6px;border-radius:4px;color:var(--blue);">override</code>.
+      </p>
+      <div class="code" style="font-size:12px;">
+<span class="kw">open class</span> <span class="cl">Animal</span> {
+    <span class="kw">open fun</span> <span class="fn">hacerSonido</span>(): <span class="cl">String</span> = <span class="st">""</span>
+}
+
+<span class="kw">class</span> <span class="cl">Perro</span> : <span class="cl">Animal</span>() {
+    <span class="kw">override fun</span> <span class="fn">hacerSonido</span>() = <span class="st">"¡Guau guau!"</span>
+}
+<span class="kw">class</span> <span class="cl">Gato</span> : <span class="cl">Animal</span>() {
+    <span class="kw">override fun</span> <span class="fn">hacerSonido</span>() = <span class="st">"¡Miauu!"</span>
+}
+<span class="kw">class</span> <span class="cl">Pato</span> : <span class="cl">Animal</span>() {
+    <span class="kw">override fun</span> <span class="fn">hacerSonido</span>() = <span class="st">"¡Cuac cuac!"</span>
+}</div>
+    </div>
+    <div class="card card-dark">
+      <h4 style="margin-bottom:4px;">🎵 Haz clic para escuchar hacerSonido()</h4>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:16px;">El método se llama igual en todos, pero el resultado es distinto</p>
+      <div class="animals-row">
+        <div class="animal-card" id="ac-dog" onclick="animalSound('dog')">
+          <span class="animal-emoji">🐶</span>
+          <div class="animal-name">Perro</div>
+          <div class="animal-sound" id="as-dog"></div>
+        </div>
+        <div class="animal-card" id="ac-cat" onclick="animalSound('cat')">
+          <span class="animal-emoji">🐱</span>
+          <div class="animal-name">Gato</div>
+          <div class="animal-sound" id="as-cat"></div>
+        </div>
+        <div class="animal-card" id="ac-duck" onclick="animalSound('duck')">
+          <span class="animal-emoji">🦆</span>
+          <div class="animal-name">Pato</div>
+          <div class="animal-sound" id="as-duck"></div>
+        </div>
+        <div class="animal-card" id="ac-lion" onclick="animalSound('lion')">
+          <span class="animal-emoji">🦁</span>
+          <div class="animal-name">León</div>
+          <div class="animal-sound" id="as-lion"></div>
+        </div>
+      </div>
+      <div style="margin-top:16px;background:rgba(59,130,246,.08);border:1px solid rgba(59,130,246,.2);border-radius:10px;padding:12px;font-size:13px;color:var(--muted);">
+        💡 Todos son <strong style="color:var(--blue);">Animal</strong>, pero hacerSonido() actúa diferente en cada uno. Eso es polimorfismo.
+      </div>
+    </div>
+  </div>
+
+  <!-- ABSTRACCIÓN -->
+  <div class="pillar-content" id="pillar-abstr">
+    <div>
+      <span class="badge badge-green" style="margin-bottom:12px;">🎭 Abstracción</span>
+      <h3 style="margin-bottom:8px;">Mostrar lo esencial, ocultar lo complejo</h3>
+      <p style="color:var(--muted);font-size:14px;line-height:1.7;margin-bottom:16px;">
+        Manejas el auto sin saber cómo funciona el motor por dentro. Las clases <code style="background:var(--bg3);padding:2px 6px;border-radius:4px;color:var(--green);">abstract</code> obligan a implementar los métodos esenciales.
+      </p>
+      <div class="code" style="font-size:12px;">
+<span class="kw">abstract class</span> <span class="cl">Vehiculo</span> {
+    <span class="cm">// Obliga a cada hijo a implementarlo</span>
+    <span class="kw">abstract fun</span> <span class="fn">moverse</span>()
+    <span class="cm">// Lo complejo está oculto aquí adentro</span>
+    <span class="kw">private fun</span> <span class="fn">calcularCombustion</span>() { }
+}
+
+<span class="kw">class</span> <span class="cl">Auto</span> : <span class="cl">Vehiculo</span>() {
+    <span class="kw">override fun</span> <span class="fn">moverse</span>() {
+        <span class="cm">// Solo dices qué hace, no el cómo interno</span>
+        println(<span class="st">"Girando ruedas..."</span>)
+    }
+}</div>
+    </div>
+    <div class="car-demo">
+      <h4 style="margin-bottom:4px;">🚗 Maneja el auto — sin saber cómo funciona el motor</h4>
+      <p style="font-size:12px;color:var(--muted);margin-bottom:12px;">Tú solo ves los controles (interfaz). El motor es abstracto para ti.</p>
+      <div class="car-road">
+        <span class="car-icon" id="car-pos" style="left:10px;">🚗</span>
+      </div>
+      <div class="steering-controls">
+        <div></div>
+        <div class="car-btn" onclick="driveCar('forward')">⬆ Acelerar</div>
+        <div></div>
+        <div class="car-btn" onclick="driveCar('left')">⬅ Girar</div>
+        <div class="car-btn" onclick="driveCar('stop')">⏹ Frenar</div>
+        <div class="car-btn" onclick="driveCar('right')">➡ Girar</div>
+      </div>
+      <div class="car-status" id="car-status">← Usa los controles para manejar</div>
+      <div class="hidden-engine">
+        🔧 Motor interno: calcularCombustion() · ajustarValvulas() · inyectarCombustible() · <em>todo esto está oculto</em>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══════════════ DATABASES ═══════════════ -->
+<section class="section reveal" id="databases">
+  <div class="section-label">Tema 3 · Bases de Datos</div>
+  <h2>¿Cómo se guardan los datos?</h2>
+  <p class="section-sub">Todo app guarda información en algún lugar. Las bases de datos son esos lugares, y cada una tiene sus reglas.</p>
+
+  <!-- CONCEPTS -->
+  <div class="db-grid reveal">
+    <div class="db-card">
+      <div style="margin-bottom:8px;"><span class="badge badge-blue">📊 BD Relacional</span></div>
+      <div class="term">Base de datos relacional</div>
+      <div class="analogy">Como Excel pero con tablas <strong>conectadas entre sí</strong>. Una tabla de clientes, otra de pedidos, vinculadas. Ejemplos: MySQL, PostgreSQL, SQLite.</div>
+    </div>
+    <div class="db-card">
+      <div style="margin-bottom:8px;"><span class="badge badge-yellow" style="background:rgba(251,191,36,.1);color:var(--yellow);border-color:rgba(251,191,36,.2);">🔑 Primary Key</span></div>
+      <div class="term">Clave Primaria (PK)</div>
+      <div class="analogy">El campo <strong>único</strong> que identifica cada fila. Como tu DNI: nadie tiene dos iguales. Se escribe <code style="background:var(--bg3);padding:1px 5px;border-radius:3px;font-size:11px;">PRIMARY KEY</code>.</div>
+    </div>
+    <div class="db-card">
+      <div style="margin-bottom:8px;"><span class="badge badge-blue">🔗 Foreign Key</span></div>
+      <div class="term">Clave Foránea (FK)</div>
+      <div class="analogy">Un campo que <strong>conecta dos tablas</strong>. En la tabla Pedidos, el <em>id_cliente</em> es FK que apunta a la tabla Clientes.</div>
+    </div>
+    <div class="db-card">
+      <div style="margin-bottom:8px;"><span class="badge badge-teal">🔗 JOIN</span></div>
+      <div class="term">JOIN</div>
+      <div class="analogy"><strong>Combina datos</strong> de dos tablas en una consulta. "Quiero ver el nombre del cliente junto a su pedido." → JOIN entre ambas tablas.</div>
+    </div>
+    <div class="db-card">
+      <div style="margin-bottom:8px;"><span class="badge badge-green">✅ CRUD</span></div>
+      <div class="term">CRUD</div>
+      <div class="analogy">Las <strong>4 operaciones básicas</strong>: <em>Create</em> (crear), <em>Read</em> (leer), <em>Update</em> (actualizar), <em>Delete</em> (borrar). Todo app de gestión hace CRUD.</div>
+    </div>
+    <div class="db-card">
+      <div style="margin-bottom:8px;"><span class="badge badge-purple">🗂 Normalización</span></div>
+      <div class="term">Normalización</div>
+      <div class="analogy">Organizar las tablas para <strong>evitar datos repetidos</strong>. Separar info en tablas lógicas: no escribas el nombre del cliente en cada pedido, solo su id.</div>
+    </div>
+  </div>
+
+  <!-- INTERACTIVE CRUD -->
+  <div class="card reveal" style="margin-bottom:32px;">
+    <h3 style="margin-bottom:6px;">🎮 CRUD Interactivo — Tabla de Clientes</h3>
+    <p style="color:var(--muted);font-size:13px;margin-bottom:20px;">Haz clic en cada operación para verla en acción sobre la tabla:</p>
+    <div class="crud-bar">
+      <button class="crud-btn crud-c" onclick="crudAction('create')">➕ CREATE — Agregar cliente</button>
+      <button class="crud-btn crud-r" onclick="crudAction('read')">🔍 READ — Buscar cliente</button>
+      <button class="crud-btn crud-u" onclick="crudAction('update')">✏️ UPDATE — Editar email</button>
+      <button class="crud-btn crud-d" onclick="crudAction('delete')">🗑 DELETE — Eliminar</button>
+    </div>
+    <div id="crud-sql" style="display:none;margin-bottom:12px;" class="code"></div>
+    <div style="overflow-x:auto;">
+      <table class="sql-table" id="crud-table">
+        <thead><tr><th>id_cliente (PK)</th><th>nombre</th><th>email</th><th>ciudad</th></tr></thead>
+        <tbody id="crud-body"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- JOIN DEMO -->
+  <div class="join-demo reveal">
+    <h3 style="margin-bottom:6px;">🔗 ¿Cómo funciona un JOIN?</h3>
+    <p style="color:var(--muted);font-size:13px;margin-bottom:20px;">Tenemos dos tablas separadas. El JOIN las une por la clave foránea:</p>
+    <div class="tables-row">
+      <div>
+        <div class="mini-table">
+          <div class="h">👥 Tabla: clientes</div>
+          <div class="r"><strong style="color:var(--yellow);">id</strong> · <strong>nombre</strong></div>
+          <div class="r highlighted">1 · Ana García</div>
+          <div class="r">2 · Luis Pérez</div>
+          <div class="r">3 · María López</div>
+        </div>
+      </div>
+      <div class="join-arrow">🔗<br><span style="font-size:13px;color:var(--teal);">JOIN</span></div>
+      <div>
+        <div class="mini-table">
+          <div class="h">🛒 Tabla: pedidos</div>
+          <div class="r"><strong>id_pedido</strong> · <strong style="color:var(--blue);">id_cliente (FK)</strong> · <strong>producto</strong></div>
+          <div class="r highlighted">P001 · <span style="color:var(--blue);">1</span> · Pantalla BTOUCH</div>
+          <div class="r">P002 · 2 · ERP Odoo</div>
+          <div class="r highlighted">P003 · <span style="color:var(--blue);">1</span> · LMS</div>
+        </div>
+      </div>
+    </div>
+    <div style="text-align:center;margin:16px 0;">
+      <button class="btn btn-teal" onclick="showJoin()">▶ Ejecutar JOIN</button>
+    </div>
+    <div class="result-table" id="join-result">
+      <p style="font-size:12px;color:var(--muted);margin-bottom:10px;"><span class="badge badge-teal" style="margin-right:8px;">Resultado</span>SELECT clientes.nombre, pedidos.producto FROM clientes JOIN pedidos ON clientes.id = pedidos.id_cliente</p>
+      <table class="sql-table">
+        <thead><tr><th>nombre</th><th>producto</th></tr></thead>
+        <tbody>
+          <tr><td>Ana García</td><td>Pantalla BTOUCH</td></tr>
+          <tr><td>Ana García</td><td>LMS</td></tr>
+          <tr><td>Luis Pérez</td><td>ERP Odoo</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- SQL vs NoSQL -->
+  <div class="card reveal" style="margin-top:32px;">
+    <h3 style="margin-bottom:16px;">SQL vs NoSQL — ¿Cuál usar?</h3>
+    <div class="vs-grid">
+      <div class="vs-box vs-sql">
+        <div class="vs-title" style="color:var(--blue);">🗂 SQL (Relacional)</div>
+        <div class="vs-item">✅ Tablas con filas y columnas</div>
+        <div class="vs-item">✅ Relaciones entre tablas</div>
+        <div class="vs-item">✅ Ideal para: bancos, e-commerce, ERPs</div>
+        <div class="vs-item">📦 MySQL · PostgreSQL · SQLite (Android)</div>
+        <div class="vs-item" style="margin-top:8px;color:var(--blue);">👉 Úsalo cuando la estructura es fija y necesitas relaciones</div>
+      </div>
+      <div class="vs-box vs-nosql">
+        <div class="vs-title" style="color:var(--orange);">📄 NoSQL (No relacional)</div>
+        <div class="vs-item">✅ Guarda como documentos JSON</div>
+        <div class="vs-item">✅ Muy flexible, sin esquema fijo</div>
+        <div class="vs-item">✅ Ideal para: apps sociales, chats, logs</div>
+        <div class="vs-item">📦 Firebase · MongoDB · Room (Android)</div>
+        <div class="vs-item" style="margin-top:8px;color:var(--orange);">👉 Úsalo cuando los datos cambian mucho o son muy variados</div>
+      </div>
+    </div>
+    <div style="margin-top:16px;background:rgba(0,212,170,.05);border:1px solid rgba(0,212,170,.15);border-radius:10px;padding:14px;font-size:13px;color:var(--muted);">
+      💡 <strong style="color:var(--teal);">En Android Studio:</strong> para apps locales usas <strong>Room</strong> (que es SQLite con Kotlin). Para la nube, <strong>Firebase Firestore</strong> (NoSQL) es el más popular.
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══════════════ ANDROID STUDIO ═══════════════ -->
+<section class="section reveal" id="android">
+  <div class="section-label">Tema 4 · Android Studio + Kotlin</div>
+  <h2>Lo que Android Studio hace por ti</h2>
+  <p class="section-sub">La magia de Kotlin es que te ahorra escribir código repetitivo. Android Studio además genera estructura automáticamente.</p>
+
+  <!-- IDE MOCKUP -->
+  <div class="ide-mockup reveal">
+    <div class="ide-titlebar">
+      <div class="ide-dot" style="background:#ff5f57;"></div>
+      <div class="ide-dot" style="background:#febc2e;"></div>
+      <div class="ide-dot" style="background:#28c840;"></div>
+      <span style="font-size:12px;color:var(--muted);margin-left:8px;">Android Studio · MiApp</span>
+    </div>
+    <div class="ide-tabs">
+      <div class="ide-tab active" onclick="switchFile('main')">MainActivity.kt</div>
+      <div class="ide-tab" onclick="switchFile('data')">Auto.kt (data class)</div>
+      <div class="ide-tab" onclick="switchFile('layout')">activity_main.xml</div>
+    </div>
+    <div class="ide-layout">
+      <div class="ide-sidebar">
+        <div style="font-size:11px;font-weight:700;color:var(--muted);margin-bottom:8px;text-transform:uppercase;">📁 MiApp</div>
+        <div class="file-tree">
+          <div class="f active">📄 MainActivity.kt</div>
+          <div class="f">📄 Auto.kt</div>
+          <div class="f">🎨 activity_main.xml</div>
+          <div class="f">📋 AndroidManifest.xml</div>
+          <div class="f" style="margin-top:8px;color:var(--muted);">📦 Gradle (build.gradle)</div>
+        </div>
+      </div>
+      <div class="ide-body" id="ide-code">
+<span class="kw">package</span> com.example.miapp
+
+<span class="kw">import</span> android.os.Bundle
+<span class="kw">import</span> androidx.appcompat.app.AppCompatActivity
+
+<span class="cm">// Android Studio genera esta clase automáticamente</span>
+<span class="kw">class</span> <span class="cl">MainActivity</span> : <span class="cl">AppCompatActivity</span>() {
+
+    <span class="kw">override fun</span> <span class="fn">onCreate</span>(<span class="pr">savedInstanceState</span>: <span class="cl">Bundle</span>?) {
+        <span class="kw">super</span>.<span class="fn">onCreate</span>(<span class="pr">savedInstanceState</span>)
+        <span class="fn">setContentView</span>(R.layout.<span class="pr">activity_main</span>)
+
+        <span class="cm">// Aquí va tu código</span>
+        <span class="kw">val</span> <span class="pr">miAuto</span> = <span class="cl">Auto</span>(<span class="st">"Toyota"</span>, <span class="st">"Rojo"</span>)
+        println(<span class="pr">miAuto</span>.<span class="fn">toString</span>())  <span class="cm">// generado automático!</span>
+    }
+}
+      </div>
+    </div>
+  </div>
+
+  <!-- KOTLIN MAGIC: data class -->
+  <div class="kotlin-magic reveal">
+    <div class="magic-title">✨ El poder de <code style="background:rgba(139,92,246,.2);padding:2px 8px;border-radius:4px;">data class</code> en Kotlin</div>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:16px;">Con esta sola línea, Kotlin genera automáticamente:</p>
+    <div class="code" style="margin-bottom:16px;">
+<span class="cm">// Solo escribes esto en Kotlin:</span>
+<span class="kw">data class</span> <span class="cl">Auto</span>(<span class="kw">val</span> <span class="pr">marca</span>: <span class="cl">String</span>, <span class="kw">val</span> <span class="pr">color</span>: <span class="cl">String</span>)
+
+<span class="cm">// Y Kotlin genera AUTOMÁTICAMENTE:</span>
+<span class="cm">// ✓ Constructor principal</span>
+<span class="cm">// ✓ getters para marca y color</span>
+<span class="cm">// ✓ toString() → "Auto(marca=Toyota, color=Rojo)"</span>
+<span class="cm">// ✓ equals() → comparar dos objetos</span>
+<span class="cm">// ✓ copy() → val auto2 = miAuto.copy(color="Azul")</span>
+<span class="cm">// ✓ hashCode() → para usar en Sets y Maps</span></div>
+    <div class="magic-item">Constructor principal con los parámetros que defines</div>
+    <div class="magic-item">toString() para imprimir el objeto legiblemente</div>
+    <div class="magic-item">equals() para comparar dos objetos por valor</div>
+    <div class="magic-item">copy() para crear copias modificando solo algunos campos</div>
+    <div class="magic-item">hashCode() automático para colecciones</div>
+  </div>
+
+  <!-- ANDROID COMPONENTS -->
+  <h3 style="margin:32px 0 8px;">📱 Componentes clave que crea Android Studio</h3>
+  <p style="color:var(--muted);font-size:14px;margin-bottom:20px;">Al crear un nuevo proyecto, ya tienes esto listo:</p>
+  <div class="android-components reveal">
+    <div class="android-comp" onclick="showComponent('activity')">
+      <div class="ac-icon">📱</div>
+      <div class="ac-name">Activity</div>
+      <div class="ac-desc">Una pantalla de tu app. MainActivity es la principal.</div>
+    </div>
+    <div class="android-comp" onclick="showComponent('layout')">
+      <div class="ac-icon">🎨</div>
+      <div class="ac-name">Layout (XML)</div>
+      <div class="ac-desc">Define cómo se ve visualmente tu pantalla.</div>
+    </div>
+    <div class="android-comp" onclick="showComponent('manifest')">
+      <div class="ac-icon">📋</div>
+      <div class="ac-name">Manifest</div>
+      <div class="ac-desc">Declara qué puede hacer tu app (permisos, actividades).</div>
+    </div>
+    <div class="android-comp" onclick="showComponent('gradle')">
+      <div class="ac-icon">🔧</div>
+      <div class="ac-name">Gradle</div>
+      <div class="ac-desc">Maneja las dependencias (librerías) y la compilación.</div>
+    </div>
+    <div class="android-comp" onclick="showComponent('viewmodel')">
+      <div class="ac-icon">🧠</div>
+      <div class="ac-name">ViewModel</div>
+      <div class="ac-desc">Guarda los datos de la pantalla al rotar el teléfono.</div>
+    </div>
+    <div class="android-comp" onclick="showComponent('room')">
+      <div class="ac-icon">🗄️</div>
+      <div class="ac-name">Room (BD)</div>
+      <div class="ac-desc">Base de datos local SQLite simplificada para Android.</div>
+    </div>
+  </div>
+  <div class="card card-dark reveal" id="component-detail" style="margin-top:16px;display:none;"></div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══════════════ QUIZ ═══════════════ -->
+<section class="section reveal" id="quiz">
+  <div class="section-label">Tema 5 · Quiz 🎮</div>
+  <h2>¿Qué tanto aprendiste?</h2>
+  <p class="section-sub">10 preguntas. Sin presión — si te equivocas, te explica por qué.</p>
+
+  <div class="quiz-section">
+    <div class="quiz-progress" id="quiz-progress">Pregunta 1 de 10</div>
+    <div style="margin:14px 0;"><div class="progress-bar" style="height:8px;"><div class="progress-fill" id="quiz-fill" style="width:10%;background:linear-gradient(90deg,var(--teal),var(--purple));"></div></div></div>
+    <div class="quiz-q" id="quiz-q"></div>
+    <div class="quiz-opts" id="quiz-opts"></div>
+    <div class="quiz-feedback" id="quiz-fb"></div>
+    <div class="quiz-nav">
+      <div class="quiz-progress" id="quiz-score">✅ 0 correctas</div>
+      <button class="btn btn-teal btn-sm" id="quiz-next" onclick="nextQuestion()" style="display:none;">Siguiente →</button>
+    </div>
+  </div>
+</section>
+
+<!-- COMPONENT MODAL -->
+<div id="comp-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:200;display:none;align-items:center;justify-content:center;padding:20px;">
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:20px;max-width:500px;width:100%;padding:28px;position:relative;">
+    <button onclick="document.getElementById('comp-modal').style.display='none'" style="position:absolute;top:14px;right:14px;background:none;border:none;color:var(--muted);font-size:20px;cursor:pointer;">✕</button>
+    <div id="comp-modal-body"></div>
+  </div>
+</div>
+
+<footer style="background:var(--bg2);border-top:1px solid var(--border);padding:32px 24px;text-align:center;">
+  <div style="font-size:24px;margin-bottom:12px;">🚀</div>
+  <div style="font-weight:800;font-size:18px;margin-bottom:6px;">¡Ahora sabes las bases!</div>
+  <p style="color:var(--muted);font-size:14px;max-width:400px;margin:0 auto;">Kotlin + Android Studio + estas bases de POO y bases de datos te dan el 80% de lo que necesitas para empezar a construir apps.</p>
+  <div style="margin-top:20px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+    <a href="https://developer.android.com/kotlin" target="_blank" class="btn btn-teal btn-sm">📖 Documentación oficial Kotlin</a>
+    <a href="https://developer.android.com/courses" target="_blank" class="btn btn-outline btn-sm">🎓 Cursos Android Developers</a>
+  </div>
+</footer>
+
+<script>
+// ══ AUTO FACTORY ══
+let autos = [];
+const colors = {'🔴 Rojo':'#ef4444','🔵 Azul':'#3b82f6','🟡 Amarillo':'#fbbf24'};
+const marks  = {'Toyota':50,'Honda':80,'BMW':120};
+
+function createAuto(marca, color) {
+  const row = document.getElementById('objects-row');
+  if (autos.length === 0) row.innerHTML = '';
+  const vel = marks[marca];
+  const div = document.createElement('div');
+  div.className = 'auto-obj';
+  div.style.borderColor = colors[color] || '#00d4aa';
+  div.innerHTML = `<div class="obj-title">objeto: Auto</div>
+    <div class="obj-attr">marca: <span>${marca}</span></div>
+    <div class="obj-attr">color: <span>${color}</span></div>
+    <div class="obj-attr">velocidad: <span>${vel} km/h</span></div>`;
+  row.appendChild(div);
+  autos.push({marca,color});
+}
+function clearAutos() {
+  autos = [];
+  document.getElementById('objects-row').innerHTML = '<span style="color:var(--muted);font-size:13px;">👆 Haz clic en un botón para crear tu primer objeto</span>';
+}
+
+// ══ PILLARS ══
+function showPillar(id, btn) {
+  document.querySelectorAll('.pillar-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.pillar-content').forEach(c=>c.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('pillar-'+id).classList.add('active');
+}
+
+// ATM
+let atmSaldo = 500;
+function atmAction(action) {
+  const r = document.getElementById('atm-result');
+  if (action==='saldo')    { r.textContent = `💰 Tu saldo es: S/ ${atmSaldo}.00 — (el dato real es privado, solo ves el resultado del método getSaldo())`; r.style.color='var(--green)'; }
+  if (action==='depositar'){ atmSaldo+=100; r.textContent = `✅ Depósito de S/ 100 exitoso. Saldo actual: S/ ${atmSaldo}.00`; r.style.color='var(--teal)'; }
+  if (action==='retirar')  { atmSaldo-=50;  r.textContent = `💸 Retiro de S/ 50 exitoso. Saldo actual: S/ ${atmSaldo}.00`; r.style.color='var(--yellow)'; }
+}
+
+// ANIMALS
+const sounds = {dog:'¡Guau guau! 🐶',cat:'¡Miauu! 🐱',duck:'¡Cuac cuac! 🦆',lion:'¡ROAAR! 🦁'};
+function animalSound(animal) {
+  const card = document.getElementById('ac-'+animal);
+  const sound = document.getElementById('as-'+animal);
+  card.classList.add('playing');
+  sound.innerHTML = `<span class="sound-bubble">${sounds[animal]}</span>`;
+  setTimeout(()=>{card.classList.remove('playing');sound.innerHTML='';},1500);
+}
+
+// CAR
+let carPos = 10;
+const actions = {forward:'🚗 Acelerando... velocidad: 80 km/h',left:'↩ Girando a la izquierda',right:'↪ Girando a la derecha',stop:'⏹ Frenando... velocidad: 0 km/h'};
+function driveCar(dir) {
+  const car = document.getElementById('car-pos');
+  const status = document.getElementById('car-status');
+  if(dir==='forward') carPos = Math.min(carPos+20, 75);
+  if(dir==='stop')    carPos = Math.max(carPos-20, 10);
+  if(dir==='left')    carPos = Math.max(carPos-10, 10);
+  if(dir==='right')   carPos = Math.min(carPos+10, 75);
+  car.style.left = carPos+'%';
+  status.textContent = actions[dir];
+}
+
+// ══ CRUD ══
+let crudData = [
+  {id:1,nombre:'Ana García',email:'ana@email.com',ciudad:'Arequipa'},
+  {id:2,nombre:'Luis Pérez',email:'luis@email.com',ciudad:'Lima'},
+];
+let crudId = 3;
+const sqls = {
+  create:`INSERT INTO clientes (nombre, email, ciudad)\nVALUES ('María López', 'maria@email.com', 'Cusco');`,
+  read:`SELECT * FROM clientes\nWHERE ciudad = 'Arequipa';`,
+  update:`UPDATE clientes\nSET email = 'luis.nuevo@email.com'\nWHERE id = 2;`,
+  delete:`DELETE FROM clientes\nWHERE id = ${crudId-1};`
+};
+function renderCrudTable() {
+  document.getElementById('crud-body').innerHTML = crudData.map(r=>
+    `<tr><td><span class="pk">🔑 ${r.id}</span></td><td>${r.nombre}</td><td>${r.email}</td><td>${r.ciudad}</td></tr>`
+  ).join('');
+}
+function crudAction(op) {
+  const sqlEl = document.getElementById('crud-sql');
+  sqlEl.style.display = 'block';
+  sqlEl.innerHTML = `<span style="color:var(--muted);font-size:11px;margin-bottom:6px;display:block;">▶ SQL ejecutado:</span><span style="color:var(--teal);">${sqls[op]||''}</span>`;
+  if(op==='create'){
+    const nuevo = {id:crudId++,nombre:'María López',email:'maria@email.com',ciudad:'Cusco'};
+    crudData.push(nuevo);
+    renderCrudTable();
+    const rows = document.querySelectorAll('#crud-body tr');
+    rows[rows.length-1].classList.add('new-row');
+  }
+  if(op==='update'){
+    crudData[1].email='luis.nuevo@email.com';
+    renderCrudTable();
+  }
+  if(op==='delete'&&crudData.length>1){
+    crudData.pop();
+    renderCrudTable();
+    sqls.delete = `DELETE FROM clientes WHERE id = ${crudId-1};`;
+  }
+}
+renderCrudTable();
+
+// JOIN
+function showJoin(){
+  document.getElementById('join-result').classList.add('show');
+}
+
+// ══ IDE FILES ══
+const files = {
+  main:`<span class="kw">package</span> com.example.miapp
+
+<span class="kw">import</span> android.os.Bundle
+<span class="kw">import</span> androidx.appcompat.app.AppCompatActivity
+
+<span class="cm">// Android Studio genera esta clase automáticamente</span>
+<span class="kw">class</span> <span class="cl">MainActivity</span> : <span class="cl">AppCompatActivity</span>() {
+
+    <span class="kw">override fun</span> <span class="fn">onCreate</span>(<span class="pr">savedInstanceState</span>: <span class="cl">Bundle</span>?) {
+        <span class="kw">super</span>.<span class="fn">onCreate</span>(<span class="pr">savedInstanceState</span>)
+        <span class="fn">setContentView</span>(R.layout.<span class="pr">activity_main</span>)
+
+        <span class="kw">val</span> <span class="pr">miAuto</span> = <span class="cl">Auto</span>(<span class="st">"Toyota"</span>, <span class="st">"Rojo"</span>)
+        println(<span class="pr">miAuto</span>)  <span class="cm">// Auto(marca=Toyota, color=Rojo)</span>
+    }
+}`,
+  data:`<span class="kw">package</span> com.example.miapp
+
+<span class="cm">// Con UNA sola línea, Kotlin genera TODO esto automáticamente:</span>
+<span class="kw">data class</span> <span class="cl">Auto</span>(
+    <span class="kw">val</span> <span class="pr">marca</span>: <span class="cl">String</span>,
+    <span class="kw">val</span> <span class="pr">color</span>: <span class="cl">String</span>,
+    <span class="kw">var</span> <span class="pr">velocidad</span>: <span class="cl">Int</span> = <span class="num">0</span>
+)
+
+<span class="cm">// ✅ Genera automáticamente:</span>
+<span class="cm">// toString()  → "Auto(marca=Toyota, color=Rojo, velocidad=0)"</span>
+<span class="cm">// equals()    → compara todos los campos</span>
+<span class="cm">// copy()      → val auto2 = miAuto.copy(color="Azul")</span>
+<span class="cm">// hashCode()  → para colecciones como Set y Map</span>
+
+<span class="cm">// Uso:</span>
+<span class="kw">val</span> <span class="pr">a1</span> = <span class="cl">Auto</span>(<span class="st">"Toyota"</span>, <span class="st">"Rojo"</span>)
+<span class="kw">val</span> <span class="pr">a2</span> = <span class="pr">a1</span>.<span class="fn">copy</span>(<span class="pr">color</span> = <span class="st">"Azul"</span>)  <span class="cm">// fácil!</span>`,
+  layout:`<span class="cm">&lt;!-- activity_main.xml — Android lo genera automáticamente --&gt;</span>
+<span class="kw">&lt;?xml</span> version=<span class="st">"1.0"</span> encoding=<span class="st">"utf-8"</span><span class="kw">?&gt;</span>
+<span class="cl">&lt;LinearLayout</span>
+    android:<span class="pr">layout_width</span>=<span class="st">"match_parent"</span>
+    android:<span class="pr">layout_height</span>=<span class="st">"match_parent"</span>
+    android:<span class="pr">orientation</span>=<span class="st">"vertical"</span>&gt;
+
+    <span class="cl">&lt;TextView</span>
+        android:<span class="pr">id</span>=<span class="st">"@+id/textViewMarca"</span>
+        android:<span class="pr">text</span>=<span class="st">"Marca del auto"</span>
+        android:<span class="pr">textSize</span>=<span class="st">"18sp"</span> /&gt;
+
+    <span class="cl">&lt;Button</span>
+        android:<span class="pr">id</span>=<span class="st">"@+id/btnAcelerar"</span>
+        android:<span class="pr">text</span>=<span class="st">"Acelerar"</span> /&gt;
+
+<span class="kw">&lt;/LinearLayout&gt;</span>`
+};
+function switchFile(f) {
+  document.querySelectorAll('.ide-tab').forEach(t=>t.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById('ide-code').innerHTML = files[f];
+}
+
+// ══ ANDROID COMPONENTS ══
+const compInfo = {
+  activity:{icon:'📱',title:'Activity',body:'Una Activity es UNA pantalla de tu app. <code>MainActivity</code> es la que ve el usuario al abrir la app. Cada pantalla nueva que agregas = una Activity nueva (o un Fragment).'},
+  layout:{icon:'🎨',title:'Layout XML',body:'El archivo XML que define lo que el usuario VE. Contiene botones, textos, imágenes. Android Studio tiene un editor visual para arrastrarlo sin escribir XML.'},
+  manifest:{icon:'📋',title:'AndroidManifest.xml',body:'El "pasaporte" de tu app. Declara qué Activities existen, qué permisos necesita (cámara, internet, GPS), y cuál es la pantalla de inicio.'},
+  gradle:{icon:'🔧',title:'build.gradle',body:'Maneja las librerías (dependencias) de tu proyecto. Si quieres agregar Retrofit para llamadas a internet, lo pones aquí. Android Studio lo lee y descarga todo automático.'},
+  viewmodel:{icon:'🧠',title:'ViewModel',body:'Guarda los datos de la pantalla cuando el usuario gira el teléfono. Sin ViewModel, tu lista de datos desaparecería al girar. Es parte de la arquitectura MVVM.'},
+  room:{icon:'🗄️',title:'Room Database',body:'La forma más fácil de guardar datos localmente en Android. Es SQLite pero con anotaciones Kotlin. Defines una <code>@Entity</code> (tabla), un <code>@Dao</code> (operaciones CRUD) y la <code>@Database</code>.'},
+};
+function showComponent(id) {
+  const c = compInfo[id];
+  const modal = document.getElementById('comp-modal');
+  document.getElementById('comp-modal-body').innerHTML = `
+    <div style="font-size:40px;margin-bottom:12px;">${c.icon}</div>
+    <h3 style="margin-bottom:10px;">${c.title}</h3>
+    <p style="color:var(--muted);font-size:14px;line-height:1.7;">${c.body}</p>`;
+  modal.style.display='flex';
+}
+document.getElementById('comp-modal').addEventListener('click',function(e){if(e.target===this)this.style.display='none';});
+
+// ══ QUIZ ══
+const questions = [
+  {q:'¿Qué es una CLASE en POO?',opts:['Una variable que guarda números','Un molde o plano que define cómo será un objeto','Un error de programación','Una función que imprime texto'],ans:1,exp:'¡Correcto! La clase es el molde. El objeto es la cosa real creada a partir de ese molde.'},
+  {q:'¿Qué es un OBJETO en POO?',opts:['El código que escribe el programador','Una pantalla de Android','Una instancia concreta creada a partir de una clase','El archivo main de tu proyecto'],ans:2,exp:'¡Exacto! "val miAuto = Auto()" crea un OBJETO (instancia) de la clase Auto.'},
+  {q:'¿Qué pilar de POO permite que una clase HIJA reciba los atributos de una clase PADRE?',opts:['Encapsulamiento','Polimorfismo','Abstracción','Herencia'],ans:3,exp:'¡Herencia! Con "class Auto : Vehiculo()" el Auto hereda todo de Vehículo.'},
+  {q:'¿Qué significa el modificador "private" en una clase?',opts:['El método se puede usar desde cualquier parte','El atributo solo es accesible desde dentro de la clase','La clase puede ser heredada','El método es abstracto'],ans:1,exp:'¡Correcto! "private" esconde el dato. Eso es Encapsulamiento: proteger los datos internos.'},
+  {q:'¿Qué hace un CONSTRUCTOR?',opts:['Destruye el objeto cuando ya no se usa','Imprime el objeto en pantalla','Se ejecuta automáticamente al crear el objeto y le da sus valores iniciales','Conecta la app con internet'],ans:2,exp:'¡Así es! El constructor es como la línea de ensamblaje que le da sus valores al objeto al crearlo.'},
+  {q:'¿Qué operación del CRUD borra un registro de la base de datos?',opts:['Create','Read','Update','Delete'],ans:3,exp:'¡D de Delete! CRUD = Create (crear), Read (leer), Update (actualizar), Delete (borrar).'},
+  {q:'¿Para qué sirve la CLAVE PRIMARIA (Primary Key) en una tabla?',opts:['Para cifrar la contraseña del usuario','Para identificar de forma única cada fila de la tabla','Para conectar dos tablas entre sí','Para ordenar los datos alfabéticamente'],ans:1,exp:'¡Correcto! La PK es única por fila, como el DNI. Nadie tiene dos iguales.'},
+  {q:'¿Qué hace un JOIN en SQL?',opts:['Borra filas duplicadas','Ordena los resultados de mayor a menor','Combina datos de dos o más tablas','Crea una nueva tabla vacía'],ans:2,exp:'¡Exacto! JOIN une tablas usando la clave foránea. "Quiero el nombre del cliente junto a su pedido."'},
+  {q:'¿Qué ventaja tiene un "data class" en Kotlin?',opts:['Permite crear apps más lentas','Genera automáticamente constructor, toString, equals y copy','Es lo mismo que una clase normal','Sirve solo para bases de datos'],ans:1,exp:'¡Sí! Con "data class Auto(val marca: String)" Kotlin genera toString, equals, copy y hashCode gratis.'},
+  {q:'¿Cuál de estas herramientas es la base de datos LOCAL más usada en Android?',opts:['MySQL','MongoDB','Firebase','Room (SQLite)'],ans:3,exp:'¡Room! Es SQLite con anotaciones Kotlin. Para nube usas Firebase; para local, Room.'},
+];
+let qIdx=0, score=0, answered=false;
+
+function loadQuestion() {
+  const q = questions[qIdx];
+  document.getElementById('quiz-q').textContent = q.q;
+  document.getElementById('quiz-opts').innerHTML = q.opts.map((o,i)=>
+    `<div class="quiz-opt" onclick="answerQ(${i})">${o}</div>`
+  ).join('');
+  document.getElementById('quiz-progress').textContent=`Pregunta ${qIdx+1} de ${questions.length}`;
+  document.getElementById('quiz-fill').style.width=((qIdx+1)/questions.length*100)+'%';
+  document.getElementById('quiz-fb').className='quiz-feedback';
+  document.getElementById('quiz-fb').textContent='';
+  document.getElementById('quiz-next').style.display='none';
+  answered=false;
+}
+
+function answerQ(i) {
+  if(answered) return;
+  answered=true;
+  const q=questions[qIdx];
+  const opts=document.querySelectorAll('.quiz-opt');
+  opts[i].classList.add(i===q.ans?'correct':'wrong');
+  opts[q.ans].classList.add('correct');
+  if(i===q.ans) score++;
+  const fb=document.getElementById('quiz-fb');
+  fb.className='quiz-feedback show';
+  fb.style.background=i===q.ans?'rgba(34,197,94,.1)':'rgba(239,68,68,.1)';
+  fb.style.border=`1px solid ${i===q.ans?'rgba(34,197,94,.3)':'rgba(239,68,68,.3)'}`;
+  fb.style.color=i===q.ans?'var(--green)':'var(--red)';
+  fb.textContent=(i===q.ans?'✅ ':'❌ ')+q.exp;
+  document.getElementById('quiz-score').textContent=`✅ ${score} correctas`;
+  document.getElementById('quiz-next').style.display='inline-flex';
+  document.getElementById('quiz-next').textContent=qIdx<questions.length-1?'Siguiente →':'Ver resultados 🏆';
+}
+
+function nextQuestion() {
+  qIdx++;
+  if(qIdx>=questions.length) {
+    const pct=Math.round(score/questions.length*100);
+    const emoji=pct>=80?'🏆':pct>=60?'👍':'📚';
+    document.querySelector('.quiz-section').innerHTML=`
+      <div style="text-align:center;padding:20px;">
+        <div style="font-size:64px;margin-bottom:16px;">${emoji}</div>
+        <h2 style="margin-bottom:8px;">${score}/${questions.length} correctas (${pct}%)</h2>
+        <p style="color:var(--muted);margin-bottom:24px;">${pct>=80?'¡Excelente! Tienes bases sólidas para empezar con Kotlin.':pct>=60?'¡Bien! Repasa los temas donde fallaste.':'Sigue estudiando, ¡cada intento te hace mejor!'}</p>
+        <button class="btn btn-teal" onclick="location.reload()">🔄 Intentar de nuevo</button>
+      </div>`;
+    return;
+  }
+  loadQuestion();
+}
+loadQuestion();
+
+// ══ PROGRESS BAR ══
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement.scrollHeight-window.innerHeight;
+  document.getElementById('progress-bar').style.width=(window.scrollY/h*100)+'%';
+});
+
+// ══ SCROLL REVEAL ══
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');}});
+},{threshold:.1});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+// ══ NAV ACTIVE ══
+function scrollTo(id){document.getElementById(id).scrollIntoView({behavior:'smooth'});}
+const sections=['oop','pillars','databases','android','quiz'];
+window.addEventListener('scroll',()=>{
+  let cur='';
+  sections.forEach(s=>{const el=document.getElementById(s);if(el&&window.scrollY>=el.offsetTop-100)cur=s;});
+  document.querySelectorAll('.nav-link').forEach(l=>{
+    l.classList.toggle('active',l.getAttribute('onclick')?.includes(cur));
+  });
+  const done=sections.filter(s=>{const el=document.getElementById(s);return el&&window.scrollY>=el.offsetTop-100;}).length;
+  document.getElementById('progress-pill').textContent=`${done} / ${sections.length} temas`;
+});
+</script>
+</body>
+</html>

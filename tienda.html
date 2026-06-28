@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tienda — Brighter Perú</title>
+<link rel="stylesheet" href="styles.css">
+<style>
+  .shop-hero {
+    background: linear-gradient(135deg, #0d1f2d 0%, #1a3a5c 100%);
+    color: white; padding: 48px 24px; text-align: center;
+  }
+  .shop-hero h1 { color: white; font-size: 40px; margin-bottom: 10px; }
+  .shop-hero p  { color: rgba(255,255,255,.6); }
+
+  /* FILTERS */
+  .filter-bar {
+    background: white; border-bottom: 1px solid var(--border);
+    position: sticky; top: 68px; z-index: 100; padding: 14px 24px;
+  }
+  .filter-inner {
+    max-width: 1200px; margin: 0 auto;
+    display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  }
+  .filter-btn {
+    padding: 7px 18px; border-radius: 20px;
+    border: 1.5px solid var(--border); background: white;
+    font-size: 13px; font-weight: 500; cursor: pointer;
+    transition: all .2s; color: var(--gray);
+  }
+  .filter-btn:hover, .filter-btn.active {
+    background: var(--teal); color: white; border-color: var(--teal);
+  }
+
+  /* GRID */
+  .shop-body { max-width: 1200px; margin: 36px auto; padding: 0 24px; }
+  .product-card {
+    background: white; border-radius: 16px; overflow: hidden;
+    border: 1px solid var(--border); transition: all .25s; cursor: pointer;
+    position: relative; display: flex; flex-direction: column;
+  }
+  .product-card:hover { box-shadow: var(--shadow-teal); transform: translateY(-3px); border-color: var(--teal); }
+  .product-thumb {
+    height: 180px; background: linear-gradient(135deg, #0d1f2d, #1a3a5c);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 56px; position: relative;
+  }
+  .thumb-badge-cat {
+    position: absolute; top: 12px; left: 12px;
+    font-size: 10px; font-weight: 700; padding: 3px 9px; border-radius: 20px;
+    background: rgba(0,163,163,.85); color: white; text-transform: uppercase; letter-spacing: .5px;
+  }
+  .thumb-badge-new {
+    position: absolute; top: 12px; right: 12px;
+  }
+  .prod-body { padding: 18px; flex: 1; display: flex; flex-direction: column; }
+  .prod-name { font-size: 14px; font-weight: 700; margin-bottom: 4px; line-height: 1.4; }
+  .prod-sub  { font-size: 12px; color: var(--gray); margin-bottom: 12px; line-height: 1.5; flex: 1; }
+  .prod-footer { display: flex; align-items: center; justify-content: space-between; margin-top: auto; }
+  .prod-price { font-size: 18px; font-weight: 800; color: var(--teal); }
+  .prod-price-from { font-size: 11px; font-weight: 400; color: var(--gray); }
+  .btn-detail {
+    background: var(--teal-light); color: var(--teal);
+    border: none; border-radius: 8px; padding: 8px 14px;
+    font-size: 12px; font-weight: 700; cursor: pointer; transition: all .2s;
+  }
+  .btn-detail:hover { background: var(--teal); color: white; }
+
+  /* ── PRODUCT MODAL ── */
+  .modal-overlay { display: none; }
+  .modal-overlay.open { display: flex; }
+
+  .size-opt {
+    padding: 8px 16px; border-radius: 8px; border: 2px solid var(--border);
+    font-size: 13px; font-weight: 600; cursor: pointer; transition: all .2s; background: white;
+  }
+  .size-opt:hover { border-color: var(--teal); color: var(--teal); }
+  .size-opt.sel   { border-color: var(--teal); background: var(--teal); color: white; }
+
+  .model-opt {
+    padding: 14px; border-radius: 10px; border: 2px solid var(--border);
+    cursor: pointer; transition: all .2s;
+  }
+  .model-opt:hover { border-color: var(--teal); }
+  .model-opt.sel   { border-color: var(--teal); background: var(--teal-light); }
+  .model-opt .m-name { font-size: 13px; font-weight: 700; }
+  .model-opt .m-desc { font-size: 11px; color: var(--gray); margin-top: 3px; }
+
+  .addon-row {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 14px; border-radius: 10px; border: 2px solid var(--border);
+    cursor: pointer; transition: all .2s; margin-bottom: 8px;
+  }
+  .addon-row:hover { border-color: var(--teal); }
+  .addon-row.sel   { border-color: var(--teal); background: var(--teal-light); }
+  .addon-chk {
+    width: 20px; height: 20px; border-radius: 5px; border: 2px solid var(--border);
+    display: flex; align-items: center; justify-content: center; font-size: 11px;
+  }
+  .addon-row.sel .addon-chk { background: var(--teal); border-color: var(--teal); color: white; }
+
+  .config-label { font-size: 11px; font-weight: 700; color: var(--gray); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 10px; }
+  .config-group { margin-bottom: 20px; }
+
+  .total-box {
+    background: var(--light); border-radius: 12px; padding: 16px;
+    display: flex; align-items: center; justify-content: space-between;
+    border: 1px solid var(--border); margin-bottom: 14px;
+  }
+  .total-box .amount { font-size: 26px; font-weight: 800; color: var(--teal); }
+
+  .feature-list { list-style: none; margin-top: 16px; }
+  .feature-list li { display: flex; gap: 10px; font-size: 13px; color: var(--gray); margin-bottom: 7px; }
+  .feature-list li::before { content: '✓'; color: var(--green); font-weight: 700; flex-shrink: 0; }
+
+  .app-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+  .app-tag  { background: var(--teal-light); color: var(--teal); border-radius: 20px; font-size: 11px; font-weight: 600; padding: 4px 10px; }
+
+  .modal-img {
+    height: 240px; background: linear-gradient(135deg, #0d1f2d, #1a3a5c);
+    display: flex; align-items: center; justify-content: center; font-size: 80px;
+    border-radius: 12px; margin-bottom: 16px; position: relative;
+  }
+  .size-preview { position: absolute; bottom: 14px; right: 14px; }
+
+  @media (max-width:700px) {
+    .modal-box { max-height: 95vh; }
+  }
+</style>
+</head>
+<body>
+
+<div id="header-root"></div>
+
+<div class="shop-hero">
+  <h1>Su recorrido inicia aquí</h1>
+  <p>Configura tu solución ideal · Precios desde</p>
+</div>
+
+<div class="filter-bar">
+  <div class="filter-inner">
+    <strong style="font-size:13px;color:var(--gray);margin-right:4px;">Filtrar:</strong>
+    <button class="filter-btn active" onclick="applyFilter('all',this)">Todos</button>
+    <button class="filter-btn" onclick="applyFilter('educacion',this)">🎓 Educación</button>
+    <button class="filter-btn" onclick="applyFilter('empresa',this)">🏢 Empresas</button>
+    <button class="filter-btn" onclick="applyFilter('software',this)">💻 Software</button>
+    <button class="filter-btn" onclick="applyFilter('totem',this)">📣 Señalización</button>
+  </div>
+</div>
+
+<div class="shop-body">
+  <div class="grid-auto" id="products-grid"></div>
+</div>
+
+<!-- ═══════ PRODUCT MODAL ═══════ -->
+<div class="modal-overlay" id="product-modal" onclick="closeModal(event)">
+  <div class="modal-box" style="max-width:680px;" onclick="event.stopPropagation()">
+    <div class="modal-header">
+      <div>
+        <span id="m-cat" class="badge badge-teal-soft" style="margin-bottom:6px;display:inline-block;"></span>
+        <h3 id="m-name"></h3>
+        <div id="m-subtitle" style="font-size:13px;color:var(--gray);margin-top:4px;"></div>
+      </div>
+      <button class="modal-close" onclick="document.getElementById('product-modal').classList.remove('open')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="grid-2" style="gap:32px;">
+        <!-- LEFT -->
+        <div>
+          <div class="modal-img" id="m-img">
+            <span id="m-emoji" style="font-size:72px;"></span>
+            <div class="size-preview">
+              <span class="badge badge-teal" id="m-size-badge" style="display:none;"></span>
+            </div>
+          </div>
+          <ul class="feature-list" id="m-features"></ul>
+          <div id="m-apps-section" style="margin-top:16px;">
+            <div class="config-label">Apps incluidas</div>
+            <div class="app-tags" id="m-apps"></div>
+          </div>
+        </div>
+        <!-- RIGHT -->
+        <div>
+          <!-- Size -->
+          <div class="config-group" id="m-size-group">
+            <div class="config-label">Tamaño de pantalla</div>
+            <div class="flex gap-8" style="flex-wrap:wrap;" id="m-size-opts"></div>
+          </div>
+          <!-- Model -->
+          <div class="config-group" id="m-model-group">
+            <div class="config-label">Modelo</div>
+            <div class="grid-2" style="gap:8px;" id="m-model-opts"></div>
+          </div>
+          <!-- Add-ons -->
+          <div class="config-group" id="m-addons-group">
+            <div class="config-label">Software adicional</div>
+            <div id="m-addons"></div>
+          </div>
+          <!-- Total -->
+          <div class="total-box">
+            <div>
+              <div style="font-size:12px;color:var(--gray);">Total estimado</div>
+              <div class="amount" id="m-total">S/ 0</div>
+            </div>
+            <div style="text-align:right;font-size:11px;color:var(--gray);">IGV incluido<br>Financiamiento disp.</div>
+          </div>
+          <!-- CTAs -->
+          <button class="btn btn-primary btn-full" onclick="doAddToCart()">🛒 Agregar al carrito</button>
+          <a href="demo.html" class="btn btn-full" style="background:var(--orange-light);color:var(--orange);border:2px solid var(--orange);margin-top:10px;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:8px;padding:13px;border-radius:var(--radius);font-weight:700;">
+            📋 Solicitar demostración gratuita
+          </a>
+          <div style="margin-top:12px;font-size:12px;color:var(--gray);text-align:center;">
+            ✅ Incluye instalación · Capacitación inicial · Garantía
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="footer-root"></div>
+
+<script src="app.js"></script>
+<script>
+document.getElementById('header-root').innerHTML = renderHeader('tienda.html');
+document.getElementById('footer-root').innerHTML = renderFooter();
+
+// ── STATE ──
+let currentProd = null;
+let selSize     = null;
+let selModel    = null;
+let selAddons   = new Set();
+const catLabels = { educacion:'🎓 Educación', empresa:'🏢 Empresas', totem:'📣 Señalización', software:'💻 Software' };
+
+// ── RENDER GRID ──
+function renderGrid(filter = 'all') {
+  const list = filter === 'all' ? PRODUCTS : PRODUCTS.filter(p => p.cat === filter);
+  document.getElementById('products-grid').innerHTML = list.map(p => {
+    const price = p.sizes.length ? p.basePrices[p.sizes[0]] : p.basePrices.default;
+    return `<div class="product-card" onclick="openModal(${p.id})">
+      <div class="product-thumb">
+        ${p.emoji}
+        <span class="thumb-badge-cat">${catLabels[p.cat]}</span>
+        ${p.isNew ? '<span class="thumb-badge-new"><span class="badge badge-orange">¡Nuevo!</span></span>' : ''}
+      </div>
+      <div class="prod-body">
+        <div class="prod-name">${p.name}</div>
+        <div class="prod-sub">${p.subtitle}</div>
+        <div class="prod-footer">
+          <div class="prod-price">${formatPrice(price)} <span class="prod-price-from">desde</span></div>
+          <button class="btn-detail">Ver más</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function applyFilter(cat, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderGrid(cat);
+}
+
+// ── MODAL ──
+function openModal(id) {
+  currentProd = PRODUCTS.find(p => p.id === id);
+  selAddons   = new Set();
+  selSize  = currentProd.sizes.length ? currentProd.sizes[0] : null;
+  selModel = currentProd.models[0].id;
+
+  document.getElementById('m-cat').textContent     = catLabels[currentProd.cat];
+  document.getElementById('m-name').textContent    = currentProd.name;
+  document.getElementById('m-subtitle').textContent = currentProd.subtitle;
+  document.getElementById('m-emoji').textContent   = currentProd.emoji;
+
+  // Size
+  const sg = document.getElementById('m-size-group');
+  const sb = document.getElementById('m-size-badge');
+  if (currentProd.sizes.length > 1) {
+    sg.style.display = 'block';
+    sb.style.display = 'inline';
+    sb.textContent   = selSize + '"';
+    renderSizes();
+  } else {
+    sg.style.display = 'none';
+    sb.style.display = selSize ? 'inline' : 'none';
+    if (selSize) sb.textContent = selSize + '"';
+  }
+
+  // Model
+  const mg = document.getElementById('m-model-group');
+  if (currentProd.models.length > 1) {
+    mg.style.display = 'block';
+    renderModels();
+  } else { mg.style.display = 'none'; }
+
+  // Add-ons
+  const ag = document.getElementById('m-addons-group');
+  if (currentProd.cat !== 'software') {
+    ag.style.display = 'block';
+    renderAddons();
+  } else { ag.style.display = 'none'; }
+
+  // Features
+  document.getElementById('m-features').innerHTML =
+    currentProd.features.map(f => `<li>${f}</li>`).join('');
+
+  // Apps
+  const appsSection = document.getElementById('m-apps-section');
+  if (currentProd.apps.length) {
+    appsSection.style.display = 'block';
+    document.getElementById('m-apps').innerHTML =
+      currentProd.apps.map(a => `<span class="app-tag">${a}</span>`).join('');
+  } else { appsSection.style.display = 'none'; }
+
+  updateTotal();
+  document.getElementById('product-modal').classList.add('open');
+}
+
+function renderSizes() {
+  document.getElementById('m-size-opts').innerHTML = currentProd.sizes.map(s =>
+    `<div class="size-opt ${s===selSize?'sel':''}" onclick="selectSize(${s},this)">${s}"</div>`
+  ).join('');
+}
+
+function renderModels() {
+  document.getElementById('m-model-opts').innerHTML = currentProd.models.map(m =>
+    `<div class="model-opt ${m.id===selModel?'sel':''}" onclick="selectModel('${m.id}',this)">
+      <div class="m-name">${m.name}</div>
+      <div class="m-desc">${m.desc}${m.extraPrice?` · +${formatPrice(m.extraPrice)}`:'Incluido'}</div>
+    </div>`
+  ).join('');
+}
+
+function renderAddons() {
+  document.getElementById('m-addons').innerHTML = ADDONS.map(a =>
+    `<div class="addon-row ${selAddons.has(a.id)?'sel':''}" id="ar-${a.id}" onclick="toggleAddon('${a.id}')">
+      <div class="flex gap-8" style="align-items:center;">
+        <span style="font-size:18px;">${a.icon}</span>
+        <div>
+          <div style="font-size:13px;font-weight:600;">${a.name}</div>
+          <div style="font-size:11px;color:var(--gray);">${a.desc}</div>
+        </div>
+      </div>
+      <div class="flex gap-8" style="align-items:center;">
+        <span style="font-size:12px;font-weight:700;color:var(--teal);">+${formatPrice(a.price)}${a.unit}</span>
+        <div class="addon-chk">${selAddons.has(a.id)?'✓':''}</div>
+      </div>
+    </div>`
+  ).join('');
+}
+
+function selectSize(s, el) {
+  selSize = s;
+  document.querySelectorAll('.size-opt').forEach(e => e.classList.remove('sel'));
+  el.classList.add('sel');
+  document.getElementById('m-size-badge').textContent = s + '"';
+  updateTotal();
+}
+function selectModel(id, el) {
+  selModel = id;
+  document.querySelectorAll('.model-opt').forEach(e => e.classList.remove('sel'));
+  el.classList.add('sel');
+  updateTotal();
+}
+function toggleAddon(id) {
+  selAddons.has(id) ? selAddons.delete(id) : selAddons.add(id);
+  renderAddons();
+  updateTotal();
+}
+function updateTotal() {
+  if (!currentProd) return;
+  const base  = selSize ? currentProd.basePrices[selSize] : currentProd.basePrices.default;
+  const mExtra = currentProd.models.find(m => m.id === selModel)?.extraPrice || 0;
+  const aExtra = Array.from(selAddons).reduce((s,id) => s + (ADDONS.find(a=>a.id===id)?.price||0), 0);
+  document.getElementById('m-total').textContent = formatPrice(base + mExtra + aExtra);
+}
+
+function doAddToCart() {
+  const base  = selSize ? currentProd.basePrices[selSize] : currentProd.basePrices.default;
+  const mObj  = currentProd.models.find(m => m.id === selModel);
+  const aObjs = Array.from(selAddons).map(id => ADDONS.find(a=>a.id===id));
+  const total = base + (mObj?.extraPrice||0) + aObjs.reduce((s,a)=>s+a.price,0);
+  addToCart({
+    productId: currentProd.id, name: currentProd.name, emoji: currentProd.emoji,
+    size: selSize, model: mObj, addons: aObjs, price: total
+  });
+  document.getElementById('product-modal').classList.remove('open');
+}
+
+function closeModal(e) {
+  if (e.target === document.getElementById('product-modal'))
+    document.getElementById('product-modal').classList.remove('open');
+}
+
+// ── INIT ──
+renderGrid();
+
+// Auto-open from URL param
+const urlId = new URLSearchParams(location.search).get('id');
+if (urlId) openModal(parseInt(urlId));
+</script>
+</body>
+</html>

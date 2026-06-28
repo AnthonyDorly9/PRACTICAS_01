@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Brighter Perú — Tecnología Educativa e Interactiva</title>
+<link rel="stylesheet" href="styles.css">
+<style>
+  /* ── HERO HOME ── */
+  .home-hero {
+    background: linear-gradient(135deg, #0d1f2d 0%, #1a3a5c 55%, #005f6b 100%);
+    color: white; padding: 96px 24px 80px; text-align: center; position: relative; overflow: hidden;
+  }
+  .home-hero::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 70% 50%, rgba(0,163,163,.15) 0%, transparent 60%);
+  }
+  .hero-eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.15);
+    border-radius: 20px; padding: 6px 16px; font-size: 13px; font-weight: 600;
+    color: rgba(255,255,255,.8); margin-bottom: 24px; letter-spacing: .5px;
+  }
+  .home-hero h1 { color: white; margin-bottom: 20px; }
+  .home-hero p  { color: rgba(255,255,255,.65); font-size: 17px; max-width: 540px; margin: 0 auto 40px; }
+  .hero-btns    { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+  .hero-stats {
+    display: flex; gap: 48px; justify-content: center; flex-wrap: wrap;
+    margin-top: 64px; padding-top: 40px;
+    border-top: 1px solid rgba(255,255,255,.1);
+  }
+  .stat { text-align: center; }
+  .stat-num { font-size: 36px; font-weight: 800; color: white; }
+  .stat-label { font-size: 13px; color: rgba(255,255,255,.5); margin-top: 4px; }
+
+  /* ── MODALIDADES ── */
+  .modal-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .modal-card {
+    border-radius: 20px; padding: 32px; border: 1px solid var(--border);
+    transition: all .25s; cursor: pointer; text-decoration: none; display: block;
+  }
+  .modal-card:hover { transform: translateY(-3px); box-shadow: var(--shadow); text-decoration: none; }
+  .modal-card.compra { background: linear-gradient(135deg, #e6f7f7, #ccefef); border-color: var(--teal-mid); }
+  .modal-card.demo   { background: linear-gradient(135deg, #fff7ed, #ffedd5); border-color: #fed7aa; }
+  .modal-icon  { font-size: 36px; margin-bottom: 16px; display: block; }
+  .modal-title { font-size: 19px; font-weight: 700; margin-bottom: 8px; color: var(--dark); }
+  .modal-desc  { font-size: 14px; color: var(--gray); line-height: 1.6; margin-bottom: 16px; }
+
+  /* ── FEATURED PRODUCTS ── */
+  .prod-mini {
+    background: white; border-radius: 16px; border: 1px solid var(--border);
+    overflow: hidden; transition: all .25s; cursor: pointer;
+    text-decoration: none; display: block; color: inherit;
+  }
+  .prod-mini:hover { box-shadow: var(--shadow-teal); transform: translateY(-3px); text-decoration: none; }
+  .prod-mini-img {
+    height: 160px; background: linear-gradient(135deg, #0d1f2d, #1a3a5c);
+    display: flex; align-items: center; justify-content: center; font-size: 48px;
+  }
+  .prod-mini-body { padding: 16px; }
+  .prod-mini-name { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+  .prod-mini-sub  { font-size: 12px; color: var(--gray); margin-bottom: 12px; }
+  .prod-mini-price { font-size: 17px; font-weight: 800; color: var(--teal); }
+  .prod-mini-price span { font-size: 11px; font-weight: 400; color: var(--gray); }
+
+  /* ── PARTNERS ── */
+  .partners-bar {
+    background: white; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+    padding: 28px 24px;
+  }
+  .partners-inner {
+    max-width: 1000px; margin: 0 auto;
+    display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 24px;
+  }
+  .partner-item {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 14px; font-weight: 600; color: var(--gray);
+  }
+  .partner-badge {
+    padding: 6px 14px; border-radius: 8px; font-size: 13px; font-weight: 700;
+  }
+
+  /* ── WHY SECTION ── */
+  .why-card {
+    background: white; border-radius: 16px; padding: 28px;
+    border: 1px solid var(--border); text-align: center;
+  }
+  .why-icon { font-size: 36px; margin-bottom: 16px; display: block; }
+  .why-title { font-size: 15px; font-weight: 700; margin-bottom: 8px; }
+  .why-desc { font-size: 13px; color: var(--gray); line-height: 1.6; }
+
+  /* ── ACADEMY PROMO ── */
+  .academy-promo {
+    background: linear-gradient(135deg, #1a2332, #2c3e50);
+    border-radius: 24px; padding: 56px 48px;
+    display: grid; grid-template-columns: 1fr auto; gap: 40px; align-items: center;
+    color: white;
+  }
+  .academy-promo h2 { color: white; margin-bottom: 12px; }
+  .academy-promo p  { color: rgba(255,255,255,.6); margin-bottom: 28px; }
+  .academy-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 28px; }
+  .academy-tag {
+    background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.12);
+    color: rgba(255,255,255,.75); border-radius: 20px;
+    font-size: 12px; padding: 5px 12px;
+  }
+  .academy-visual { text-align: center; font-size: 80px; }
+
+  @media (max-width: 700px) {
+    .modal-cards { grid-template-columns: 1fr; }
+    .academy-promo { grid-template-columns: 1fr; }
+    .academy-visual { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div id="header-root"></div>
+
+<!-- ═══════ HERO ═══════ -->
+<section class="home-hero">
+  <div style="position:relative;z-index:1;">
+    <div class="hero-eyebrow">🇵🇪 12 años modernizando la educación en Perú</div>
+    <h1>Su recorrido inicia aquí,<br><em style="color:var(--teal);font-style:normal;">Comencemos</em></h1>
+    <p>Soluciones EdTech para colegios, universidades y empresas. Pantallas interactivas, LMS, ERP Odoo y formación docente.</p>
+    <div class="hero-btns">
+      <a href="tienda.html" class="btn btn-primary btn-lg">🛍️ Ver productos</a>
+      <a href="demo.html"   class="btn btn-lg" style="background:rgba(255,255,255,.1);color:white;border:1px solid rgba(255,255,255,.2);">📋 Solicitar demo gratuita</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><div class="stat-num">12+</div><div class="stat-label">Años en el mercado peruano</div></div>
+      <div class="stat"><div class="stat-num">500+</div><div class="stat-label">Instituciones equipadas</div></div>
+      <div class="stat"><div class="stat-num">75</div><div class="stat-label">Países con aulas híbridas</div></div>
+      <div class="stat"><div class="stat-num">98"</div><div class="stat-label">Pantallas en stock en Arequipa</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ PARTNERS ═══════ -->
+<div class="partners-bar">
+  <div class="partners-inner">
+    <div class="partner-item">🤝 <span class="partner-badge" style="background:#714B67;color:white;">Odoo</span> Partner Oficial</div>
+    <div class="partner-item">🇦🇺 <span class="partner-badge" style="background:#0d1f2d;color:white;">BTOUCH</span> Australia · Distribuidor Perú</div>
+    <div class="partner-item"><span style="font-size:18px;">🎓</span> <span class="partner-badge" style="background:#22c55e;color:white;">EduGrowth</span> Australia · Alianza desde 2021</div>
+    <div class="partner-item"><span style="font-size:18px;">🔐</span> <span class="partner-badge" style="background:#4285F4;color:white;">Google EDLA</span> Certificado</div>
+    <div class="partner-item">🇦🇺 <span class="partner-badge" style="background:#f97316;color:white;">READY TEACHER</span> Profesores nativos</div>
+  </div>
+</div>
+
+<!-- ═══════ DOS MODALIDADES ═══════ -->
+<section class="section">
+  <div class="container">
+    <div style="text-align:center;margin-bottom:36px;">
+      <div class="section-label">¿Cómo quieres comenzar?</div>
+      <h2 class="section-title">Dos formas de trabajar con Brighter</h2>
+      <p style="color:var(--gray);max-width:500px;margin:0 auto;">Tanto si prefieres explorar y comprar online, como si quieres que un asesor vaya a tu institución, lo cubrimos.</p>
+    </div>
+    <div class="modal-cards">
+      <a href="tienda.html" class="modal-card compra">
+        <span class="modal-icon">🛒</span>
+        <div class="modal-title">Compra en la tienda online</div>
+        <div class="modal-desc">Elige tu producto, configúralo con el tamaño, modelo y software que necesitas, y coordina el pedido directamente. Incluye instalación y capacitación inicial.</div>
+        <span class="badge badge-teal">Ver tienda →</span>
+      </a>
+      <a href="demo.html" class="modal-card demo">
+        <span class="modal-icon">🎯</span>
+        <div class="modal-title">Solicitar demostración presencial</div>
+        <div class="modal-desc">Un asesor Brighter va a tu colegio, universidad o empresa con el equipo y hace una clase o reunión real. Sin costo ni compromiso. Ideal para pedidos de alto valor.</div>
+        <span class="badge badge-orange">Agendar visita →</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ PRODUCTOS DESTACADOS ═══════ -->
+<section class="section" style="background:white;padding-top:48px;padding-bottom:64px;">
+  <div class="container">
+    <div class="flex-between" style="margin-bottom:28px;flex-wrap:wrap;gap:12px;">
+      <div>
+        <div class="section-label">Catálogo</div>
+        <h2>Productos destacados</h2>
+      </div>
+      <a href="tienda.html" class="btn btn-outline btn-sm">Ver todos →</a>
+    </div>
+    <div class="grid-4" id="featured-products"></div>
+  </div>
+</section>
+
+<!-- ═══════ POR QUÉ BRIGHTER ═══════ -->
+<section class="section">
+  <div class="container">
+    <div style="text-align:center;margin-bottom:40px;">
+      <div class="section-label">Nuestra propuesta</div>
+      <h2>No solo vendemos tecnología</h2>
+      <p class="section-sub" style="margin:0 auto;">Brighter ofrece un ecosistema completo: hardware + software + formación + acompañamiento continuo.</p>
+    </div>
+    <div class="grid-4">
+      <div class="why-card">
+        <span class="why-icon">🖥️</span>
+        <div class="why-title">Hardware de élite</div>
+        <div class="why-desc">Distribuidor exclusivo BTOUCH Australia. Pantallas 4K, Android 15 y certificación Google EDLA.</div>
+      </div>
+      <div class="why-card">
+        <span class="why-icon">⚙️</span>
+        <div class="why-title">Software integrado</div>
+        <div class="why-desc">Partner oficial Odoo ERP + LMS educativo + EnglishIB. Todo conectado en un solo ecosistema.</div>
+      </div>
+      <div class="why-card">
+        <span class="why-icon">🎓</span>
+        <div class="why-title">Formación continua</div>
+        <div class="why-desc">Brighter Academy: cursos certificados para que docentes y equipos dominen cada herramienta.</div>
+      </div>
+      <div class="why-card">
+        <span class="why-icon">🤝</span>
+        <div class="why-title">Acompañamiento real</div>
+        <div class="why-desc">No desaparecemos tras la venta. Modelo Aprender–Aplicar–Acompañar con soporte local en Arequipa.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ ACADEMY PROMO ═══════ -->
+<section class="section-sm">
+  <div class="container">
+    <div class="academy-promo">
+      <div>
+        <span class="badge badge-teal" style="margin-bottom:16px;">🎓 Brighter Academy</span>
+        <h2>Aprende · Aplica · Acompaña</h2>
+        <p>Una biblioteca exclusiva de recursos, tutoriales y certificaciones diseñada para que tu institución aproveche al máximo el ecosistema BTOUCH.</p>
+        <div class="academy-tags">
+          <span class="academy-tag">TPACK</span>
+          <span class="academy-tag">SAMR</span>
+          <span class="academy-tag">Flipped Classroom</span>
+          <span class="academy-tag">STEAM</span>
+          <span class="academy-tag">ABP</span>
+          <span class="academy-tag">Neurodidáctica</span>
+          <span class="academy-tag">LMS</span>
+          <span class="academy-tag">ERP Odoo</span>
+        </div>
+        <a href="academy.html" class="btn btn-primary">Ir a la Academy →</a>
+      </div>
+      <div class="academy-visual">🎓</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ APRENDE A PROGRAMAR ═══════ -->
+<section class="section-sm">
+  <div class="container">
+    <div style="background:linear-gradient(135deg,#0f1117,#1a1d27);border:1.5px solid rgba(139,92,246,.35);border-radius:24px;padding:40px 48px;display:grid;grid-template-columns:1fr auto;gap:40px;align-items:center;">
+      <div>
+        <span class="badge badge-teal" style="margin-bottom:16px;background:rgba(139,92,246,.15);color:#8b5cf6;border-color:rgba(139,92,246,.3);">🧑‍💻 Zona de desarrollo</span>
+        <h2 style="color:white;margin-bottom:12px;">¿Quieres crear apps Android?</h2>
+        <p style="color:rgba(255,255,255,.55);margin-bottom:24px;">Aprende Kotlin, Programación Orientada a Objetos, Bases de Datos y Android Studio desde cero — con animaciones interactivas y un quiz gamificado.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px;">
+          <span style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.65);border-radius:20px;font-size:12px;padding:5px 12px;">POO</span>
+          <span style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.65);border-radius:20px;font-size:12px;padding:5px 12px;">4 Pilares</span>
+          <span style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.65);border-radius:20px;font-size:12px;padding:5px 12px;">Bases de Datos</span>
+          <span style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.65);border-radius:20px;font-size:12px;padding:5px 12px;">Kotlin</span>
+          <span style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.65);border-radius:20px;font-size:12px;padding:5px 12px;">Android Studio</span>
+          <span style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.65);border-radius:20px;font-size:12px;padding:5px 12px;">Quiz 🎮</span>
+        </div>
+        <a href="aprende-programacion.html" class="btn" style="background:linear-gradient(135deg,#00a3a3,#8b5cf6);color:white;border:none;">Ir a aprender → 🚀</a>
+      </div>
+      <div style="font-size:72px;text-align:center;">🤖</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ CONTACTO RÁPIDO ═══════ -->
+<section class="section" style="background:var(--teal);color:white;padding:48px 24px;">
+  <div class="container" style="text-align:center;">
+    <h2 style="color:white;margin-bottom:12px;">¿Listo para transformar tu institución?</h2>
+    <p style="color:rgba(255,255,255,.75);margin-bottom:28px;">Escríbenos o agenda una demo. Respondemos en menos de 24 horas.</p>
+    <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;">
+      <a href="demo.html"    class="btn btn-white">📋 Solicitar demo gratuita</a>
+      <a href="tienda.html"  class="btn" style="background:rgba(255,255,255,.15);color:white;border:1px solid rgba(255,255,255,.3);">🛍️ Ver productos</a>
+    </div>
+    <div style="margin-top:28px;font-size:14px;color:rgba(255,255,255,.6);">
+      📞 +51 949 688 879 &nbsp;·&nbsp; 📍 Arequipa, Perú &nbsp;·&nbsp; ✉️ ventas@ibrighter.com
+    </div>
+  </div>
+</section>
+
+<div id="footer-root"></div>
+
+<script src="app.js"></script>
+<script>
+document.getElementById('header-root').innerHTML = renderHeader('index.html');
+document.getElementById('footer-root').innerHTML = renderFooter();
+
+// Featured products (first 4)
+const featured = [PRODUCTS[0], PRODUCTS[1], PRODUCTS[3], PRODUCTS[6]];
+document.getElementById('featured-products').innerHTML = featured.map(p => {
+  const price = p.sizes.length ? p.basePrices[p.sizes[0]] : p.basePrices.default;
+  return `<a href="tienda.html?id=${p.id}" class="prod-mini">
+    <div class="prod-mini-img">${p.emoji}</div>
+    <div class="prod-mini-body">
+      ${p.isNew ? '<span class="badge badge-orange" style="margin-bottom:8px;font-size:10px;">¡Nuevo!</span>' : ''}
+      <div class="prod-mini-name">${p.name}</div>
+      <div class="prod-mini-sub">${p.subtitle}</div>
+      <div class="prod-mini-price">${formatPrice(price)} <span>desde</span></div>
+    </div>
+  </a>`;
+}).join('');
+</script>
+</body>
+</html>

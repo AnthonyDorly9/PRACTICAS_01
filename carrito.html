@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Carrito — Brighter Perú</title>
+<link rel="stylesheet" href="styles.css">
+<style>
+  .checkout-main { max-width: 1000px; margin: 40px auto; padding: 0 24px; }
+
+  /* STEPS */
+  .step-bar { display: flex; align-items: center; gap: 8px; margin-bottom: 36px; }
+  .s-dot {
+    width: 32px; height: 32px; border-radius: 50%;
+    border: 2px solid var(--border); background: white;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 700; color: var(--gray);
+    transition: all .3s;
+  }
+  .s-dot.active { background: var(--teal); border-color: var(--teal); color: white; }
+  .s-dot.done   { background: var(--green); border-color: var(--green); color: white; }
+  .s-label { font-size: 13px; font-weight: 500; color: var(--gray); }
+  .s-label.active { color: var(--teal); font-weight: 700; }
+  .s-line { flex: 1; height: 2px; background: var(--border); transition: background .3s; }
+  .s-line.done { background: var(--green); }
+
+  /* CART */
+  .cart-box { background: white; border-radius: 16px; border: 1px solid var(--border); overflow: hidden; }
+  .cart-box-header { padding: 18px 24px; border-bottom: 1px solid var(--border); font-size: 15px; font-weight: 700; }
+  .cart-item-row { padding: 18px 24px; border-bottom: 1px solid var(--border); display: flex; gap: 16px; align-items: flex-start; }
+  .cart-item-row:last-child { border-bottom: none; }
+  .ci-thumb {
+    width: 72px; height: 56px; border-radius: 10px;
+    background: linear-gradient(135deg, #0d1f2d, #1a3a5c);
+    display: flex; align-items: center; justify-content: center; font-size: 24px; flex-shrink: 0;
+  }
+  .ci-info { flex: 1; }
+  .ci-name { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+  .ci-config { font-size: 12px; color: var(--gray); margin-bottom: 6px; }
+  .ci-tags { display: flex; flex-wrap: wrap; gap: 4px; }
+  .ci-tag { background: var(--teal-light); color: var(--teal); font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 20px; }
+  .ci-price { font-size: 16px; font-weight: 800; color: var(--teal); text-align: right; white-space: nowrap; }
+  .ci-remove { display: block; font-size: 12px; color: var(--red); cursor: pointer; margin-top: 6px; border: none; background: none; }
+
+  /* SUMMARY */
+  .summary-box { background: white; border-radius: 16px; border: 1px solid var(--border); padding: 24px; position: sticky; top: 88px; }
+  .sum-line { display: flex; justify-content: space-between; font-size: 14px; color: var(--gray); margin-bottom: 10px; }
+  .sum-total { display: flex; justify-content: space-between; font-size: 18px; font-weight: 800; border-top: 1px solid var(--border); padding-top: 14px; margin-top: 6px; }
+  .sum-total span:last-child { color: var(--teal); }
+
+  /* FORM */
+  .form-section { background: white; border-radius: 16px; border: 1px solid var(--border); padding: 24px; margin-bottom: 20px; }
+  .form-section h3 { margin-bottom: 20px; padding-bottom: 14px; border-bottom: 1px solid var(--border); }
+
+  /* SUCCESS */
+  .success-card {
+    max-width: 560px; margin: 80px auto; padding: 0 24px;
+    text-align: center; display: none;
+  }
+  .success-inner { background: white; border-radius: 20px; border: 1px solid var(--border); padding: 48px; }
+  .success-icon { font-size: 72px; display: block; margin-bottom: 20px; }
+  .order-box { background: var(--teal-light); border-radius: 12px; padding: 20px; margin: 20px 0; border: 1px solid var(--teal-mid); }
+  .order-num { font-size: 26px; font-weight: 800; color: var(--teal); }
+  .next-step { display: flex; gap: 12px; align-items: flex-start; margin-bottom: 12px; }
+  .ns-icon { background: var(--teal); color: white; border-radius: 50%; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; font-size: 13px; flex-shrink: 0; }
+  .ns-text { font-size: 13px; color: var(--gray); line-height: 1.5; }
+</style>
+</head>
+<body>
+
+<div id="header-root"></div>
+
+<!-- ═══════ CART VIEW ═══════ -->
+<div class="checkout-main" id="view-cart">
+  <!-- STEP BAR -->
+  <div class="step-bar">
+    <div class="s-dot active" id="s1">1</div>
+    <span class="s-label active">Carrito</span>
+    <div class="s-line" id="l1"></div>
+    <div class="s-dot" id="s2">2</div>
+    <span class="s-label">Datos</span>
+    <div class="s-line" id="l2"></div>
+    <div class="s-dot" id="s3">3</div>
+    <span class="s-label">Confirmación</span>
+  </div>
+
+  <div id="cart-inner"></div>
+</div>
+
+<!-- ═══════ CHECKOUT VIEW ═══════ -->
+<div class="checkout-main" id="view-checkout" style="display:none;">
+  <a class="back-btn" href="#" onclick="goBack('cart');return false;">← Volver al carrito</a>
+  <div class="step-bar">
+    <div class="s-dot done">✓</div>
+    <span class="s-label">Carrito</span>
+    <div class="s-line done"></div>
+    <div class="s-dot active">2</div>
+    <span class="s-label active">Datos</span>
+    <div class="s-line"></div>
+    <div class="s-dot">3</div>
+    <span class="s-label">Confirmación</span>
+  </div>
+
+  <div class="grid-2" style="gap:28px;align-items:start;">
+    <div>
+      <div class="form-section">
+        <h3>📋 Datos de contacto</h3>
+        <div class="form-row">
+          <div class="form-group"><label>Nombre *</label><input class="form-control" id="co-nombre" placeholder="Tu nombre"></div>
+          <div class="form-group"><label>Apellido *</label><input class="form-control" id="co-apellido" placeholder="Apellido"></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Correo *</label><input class="form-control" id="co-email" type="email" placeholder="correo@institución.pe"></div>
+          <div class="form-group"><label>WhatsApp *</label><input class="form-control" id="co-tel" type="tel" placeholder="+51 9XX XXX XXX"></div>
+        </div>
+        <div class="form-group"><label>Institución / empresa *</label><input class="form-control" id="co-inst" placeholder="Nombre de tu institución o empresa"></div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Ciudad</label>
+            <select class="form-control" id="co-ciudad">
+              <option>Arequipa</option><option>Lima</option><option>Cusco</option><option>Trujillo</option><option>Otra</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Tipo de institución</label>
+            <select class="form-control" id="co-tipo">
+              <option>Colegio privado</option><option>Colegio público</option><option>Universidad</option><option>Empresa</option><option>Municipalidad</option><option>Otro</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="form-section">
+        <h3>💬 Información adicional</h3>
+        <div class="form-group"><label>Comentarios</label><textarea class="form-control" placeholder="Número de aulas, requerimientos especiales, fechas…"></textarea></div>
+        <div class="form-group">
+          <label>¿Cómo nos conociste?</label>
+          <select class="form-control"><option>Google / Internet</option><option>Recomendación</option><option>Redes sociales</option><option>Evento / Feria</option><option>Otro</option></select>
+        </div>
+      </div>
+    </div>
+
+    <div class="summary-box">
+      <h4 style="margin-bottom:16px;">Resumen del pedido</h4>
+      <div id="co-items-summary"></div>
+      <div class="sum-line"><span>Subtotal</span><span id="co-sub">S/ 0</span></div>
+      <div class="sum-line"><span>IGV (18%)</span><span id="co-igv">S/ 0</span></div>
+      <div class="sum-line"><span>Instalación</span><span style="color:var(--green)">Gratis</span></div>
+      <div class="sum-total"><span>Total</span><span id="co-total">S/ 0</span></div>
+      <button class="btn btn-primary btn-full" style="margin-top:20px;" onclick="completeOrder()">✅ Confirmar pedido</button>
+      <div style="text-align:center;font-size:12px;color:var(--gray);margin-top:10px;">🔒 Pedido seguro · Factura electrónica</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ SUCCESS ═══════ -->
+<div class="success-card" id="view-success">
+  <div class="success-inner">
+    <span class="success-icon">✅</span>
+    <h2 style="margin-bottom:10px;">¡Pedido confirmado!</h2>
+    <p style="margin-bottom:0;">Tu pedido fue registrado. Un asesor Brighter te contactará en menos de 24 horas para coordinar la entrega e instalación.</p>
+    <div class="order-box">
+      <div style="font-size:12px;color:var(--gray);margin-bottom:4px;">Número de pedido</div>
+      <div class="order-num" id="order-num">#BR-2026-0001</div>
+    </div>
+    <div style="text-align:left;margin-bottom:24px;">
+      <div class="next-step"><div class="ns-icon">📞</div><div class="ns-text"><strong>Llamada de confirmación</strong> — Te llamamos al WhatsApp en menos de 24h para coordinar detalles de entrega.</div></div>
+      <div class="next-step"><div class="ns-icon">📦</div><div class="ns-text"><strong>Entrega e instalación</strong> — Nuestro equipo técnico instala el equipo en tu local sin costo adicional.</div></div>
+      <div class="next-step"><div class="ns-icon">🎓</div><div class="ns-text"><strong>Capacitación inicial</strong> — Incluimos una sesión de formación para tu equipo o docentes.</div></div>
+      <div class="next-step"><div class="ns-icon">📚</div><div class="ns-text"><strong>Acceso a la Academy</strong> — Obtienes acceso a Brighter Academy con cursos certificados.</div></div>
+    </div>
+    <a href="index.html" class="btn btn-primary btn-full">Volver al inicio</a>
+    <a href="academy.html" class="btn btn-outline btn-full" style="margin-top:10px;">🎓 Ir a Brighter Academy</a>
+  </div>
+</div>
+
+<div id="footer-root"></div>
+
+<script src="app.js"></script>
+<script>
+document.getElementById('header-root').innerHTML = renderHeader('carrito.html');
+document.getElementById('footer-root').innerHTML = renderFooter();
+
+function renderCart() {
+  const cart = getCart();
+  const el   = document.getElementById('cart-inner');
+
+  if (cart.length === 0) {
+    el.innerHTML = `<div class="empty-state">
+      <span class="icon">🛒</span>
+      <h3>Tu carrito está vacío</h3>
+      <p>Explora nuestros productos y configura la solución que necesitas.</p>
+      <a href="tienda.html" class="btn btn-primary">Ver productos</a>
+    </div>`;
+    return;
+  }
+
+  const subtotal = getCartTotal();
+  const igv      = Math.round(subtotal * 0.18);
+  const total    = subtotal + igv;
+
+  el.innerHTML = `<div class="grid-2" style="gap:24px;align-items:start;">
+    <div>
+      <div class="cart-box">
+        <div class="cart-box-header">🛒 Mi carrito (${cart.length} ${cart.length===1?'producto':'productos'})</div>
+        ${cart.map(item => `
+          <div class="cart-item-row">
+            <div class="ci-thumb">${item.emoji}</div>
+            <div class="ci-info">
+              <div class="ci-name">${item.name}</div>
+              <div class="ci-config">${item.size ? `${item.size}" · ` : ''}${item.model?.name || ''}</div>
+              ${item.addons?.length ? `<div class="ci-tags">${item.addons.map(a=>`<span class="ci-tag">${a.icon} ${a.name}</span>`).join('')}</div>` : ''}
+              <button class="ci-remove" onclick="doRemove(${item.cartId})">🗑 Eliminar</button>
+            </div>
+            <div class="ci-price">${formatPrice(item.price)}</div>
+          </div>
+        `).join('')}
+      </div>
+      <a href="tienda.html" class="back-btn" style="margin-top:16px;display:inline-flex;">← Seguir comprando</a>
+    </div>
+    <div class="summary-box">
+      <h4 style="margin-bottom:16px;">Resumen</h4>
+      ${cart.map(i => `<div class="sum-line" style="font-size:13px;"><span style="max-width:180px;overflow:hidden;text-overflow:ellipsis;">${i.emoji} ${i.name}${i.size?' '+i.size+'"':''}</span><span>${formatPrice(i.price)}</span></div>`).join('')}
+      <div class="sum-line" style="margin-top:8px;"><span>Subtotal</span><span>${formatPrice(subtotal)}</span></div>
+      <div class="sum-line"><span>IGV (18%)</span><span>${formatPrice(igv)}</span></div>
+      <div class="sum-line"><span>Instalación</span><span style="color:var(--green)">Gratis</span></div>
+      <div class="sum-total"><span>Total</span><span>${formatPrice(total)}</span></div>
+      <button class="btn btn-primary btn-full" style="margin-top:20px;" onclick="goToCheckout()">Proceder al pago →</button>
+      <a href="demo.html" class="btn btn-full" style="margin-top:10px;background:var(--orange-light);color:var(--orange);border:2px solid var(--orange);display:flex;align-items:center;justify-content:center;gap:8px;padding:13px;border-radius:var(--radius);font-weight:700;text-decoration:none;">
+        📋 ¿Prefieres una demo?
+      </a>
+      <div style="text-align:center;font-size:12px;color:var(--gray);margin-top:10px;">🔒 Pago seguro · Factura electrónica</div>
+    </div>
+  </div>`;
+}
+
+function doRemove(cartId) {
+  removeFromCart(cartId);
+  renderCart();
+  showToast('Producto eliminado del carrito');
+}
+
+function goToCheckout() {
+  const cart     = getCart();
+  const subtotal = getCartTotal();
+  const igv      = Math.round(subtotal * 0.18);
+  document.getElementById('co-sub').textContent   = formatPrice(subtotal);
+  document.getElementById('co-igv').textContent   = formatPrice(igv);
+  document.getElementById('co-total').textContent = formatPrice(subtotal + igv);
+  document.getElementById('co-items-summary').innerHTML = cart.map(i =>
+    `<div class="sum-line" style="font-size:12px;margin-bottom:8px;"><span>${i.emoji} ${i.name}${i.size?' '+i.size+'"':''}</span><span>${formatPrice(i.price)}</span></div>`
+  ).join('') + '<div style="height:8px;"></div>';
+  document.getElementById('view-cart').style.display     = 'none';
+  document.getElementById('view-checkout').style.display = 'block';
+  window.scrollTo(0,0);
+}
+
+function goBack(to) {
+  if (to === 'cart') {
+    document.getElementById('view-checkout').style.display = 'none';
+    document.getElementById('view-cart').style.display     = 'block';
+  }
+}
+
+function completeOrder() {
+  const nombre = document.getElementById('co-nombre').value.trim();
+  const tel    = document.getElementById('co-tel').value.trim();
+  const inst   = document.getElementById('co-inst').value.trim();
+  if (!nombre || !tel || !inst) {
+    showToast('⚠️ Completa los campos obligatorios', 'error'); return;
+  }
+  const orderNum = '#BR-2026-' + (Math.floor(Math.random()*9000)+1000);
+  document.getElementById('order-num').textContent = orderNum;
+  clearCart();
+  document.getElementById('view-checkout').style.display = 'none';
+  document.getElementById('view-success').style.display  = 'block';
+  window.scrollTo(0,0);
+}
+
+renderCart();
+</script>
+</body>
+</html>
