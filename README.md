@@ -46,4 +46,4 @@ Página educativa interactiva para aprender los fundamentos de Kotlin y Android 
 
 ---
 
-**Autor:** Anthony Dorly · Practicante de Desarrollo de Software @ Brighter Perú S.A.C.
+**Autor:** sin nombre / modo de practica
